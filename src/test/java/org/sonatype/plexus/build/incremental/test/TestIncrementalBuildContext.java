@@ -32,7 +32,7 @@ public class TestIncrementalBuildContext implements BuildContext {
 
   private final File basedir;
 
-  private final HashSet refresh = new HashSet();
+  private final Set<File> refresh = new HashSet<>();
 
   private static final class TestScanner implements Scanner {
     private final File basedir;
@@ -105,9 +105,9 @@ public class TestIncrementalBuildContext implements BuildContext {
     return changedFiles.contains(relpath) || deletedFiles.contains(relpath);
   }
 
-  public boolean hasDelta(List relpaths) {
-    for(Iterator i = relpaths.iterator(); i.hasNext();) {
-      String relpath = (String) i.next();
+  public boolean hasDelta(List<String> relpaths) {
+    for(Iterator<String> i = relpaths.iterator(); i.hasNext();) {
+      String relpath = i.next();
       if(hasDelta(relpath)) {
         return true;
       }

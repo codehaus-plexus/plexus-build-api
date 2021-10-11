@@ -20,9 +20,9 @@ import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 
 public class TestFullBuildContext extends DefaultBuildContext {
 
-  private final Map context;
+  private final Map<String, Object> context;
 
-  public TestFullBuildContext(Map context) {
+  public TestFullBuildContext(Map<String, Object> context) {
     this.context = context;
   }
 

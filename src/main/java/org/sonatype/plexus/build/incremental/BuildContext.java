@@ -22,9 +22,9 @@ import org.codehaus.plexus.util.Scanner;
 
 // TODO should it be BuildWorkspace or something like that?
 public interface BuildContext {
-  public static final int SEVERITY_WARNING = 1;
+  int SEVERITY_WARNING = 1;
 
-  public static final int SEVERITY_ERROR = 2;
+  int SEVERITY_ERROR = 2;
 
   // TODO should we add File getBasedir()?
   
@@ -50,7 +50,7 @@ public interface BuildContext {
    *  
    * @param relpaths List<String> are paths relative to build context basedir
    */
-  boolean hasDelta(List relpaths);
+  boolean hasDelta(List<String> relpaths);
 
   /**
    * Indicates that the file or folder content has been modified during the build.
@@ -103,7 +103,7 @@ public interface BuildContext {
    * 
    * Returns empty Scanner if <code>basedir</code> is not under this build context basedir.
    * 
-   * @see http://jira.codehaus.org/browse/MSHARED-125
+   * https://issues.apache.org/jira/browse/MSHARED-125
    */
   Scanner newScanner(File basedir, boolean ignoreDelta);
 

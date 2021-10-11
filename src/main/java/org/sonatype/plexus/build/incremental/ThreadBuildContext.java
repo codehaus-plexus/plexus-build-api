@@ -31,16 +31,17 @@ import org.codehaus.plexus.util.Scanner;
  */
 public class ThreadBuildContext implements BuildContext {
 
-  private static final ThreadLocal threadContext = new ThreadLocal();
+  private static final ThreadLocal<BuildContext> threadContext = new ThreadLocal<BuildContext>(){
+    @Override
+    protected BuildContext initialValue() {
+      return defaultContext;
+    }
+  };
 
   private static final DefaultBuildContext defaultContext = new DefaultBuildContext();
 
   public static BuildContext getContext() {
-    BuildContext context = (BuildContext) threadContext.get();
-    if(context == null) {
-      context = defaultContext;
-    }
-    return context;
+    return threadContext.get();
   }
 
   public static void setThreadBuildContext(BuildContext context) {
@@ -55,7 +56,7 @@ public class ThreadBuildContext implements BuildContext {
     return getContext().hasDelta(file);
   }
 
-  public boolean hasDelta(List relPaths) {
+  public boolean hasDelta(List<String> relPaths) {
     return getContext().hasDelta(relPaths);
   }
 

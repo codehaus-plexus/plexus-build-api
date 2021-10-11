@@ -46,7 +46,7 @@ public class DefaultBuildContext extends AbstractLogEnabled implements BuildCont
     return true;
   }
 
-  public boolean hasDelta(List relpaths) {
+  public boolean hasDelta(List<String> relpaths) {
     return true;
   }
 
@@ -84,10 +84,7 @@ public class DefaultBuildContext extends AbstractLogEnabled implements BuildCont
   }
 
   private String getMessage(File file, int line, int column, String message) {
-    StringBuffer sb = new StringBuffer();
-    sb.append(file.getAbsolutePath()).append(" [").append(line).append(':').append(column).append("]: ");
-    sb.append(message);
-    return sb.toString();
+    return file.getAbsolutePath() + " [" + line + ':' + column + "]: " + message;
   }
 
   /**

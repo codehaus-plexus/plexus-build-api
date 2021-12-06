@@ -83,7 +83,7 @@ public class TestIncrementalBuildContext implements BuildContext {
   }
 
   public TestIncrementalBuildContext(File basedir, Set changedFiles, Set deletedFiles, Map context) {
-    this(basedir, changedFiles, new HashSet(), context, new ArrayList(), new ArrayList());
+    this(basedir, changedFiles, deletedFiles, context, new ArrayList(), new ArrayList());
   }
 
   public TestIncrementalBuildContext(File basedir, Set changedFiles, Set deletedFiles, Map context, List warnings, List errors) {

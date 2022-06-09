@@ -14,6 +14,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
 package org.sonatype.plexus.build.incremental;
 
 import java.io.File;
+import java.util.Comparator;
 
 import org.codehaus.plexus.util.Scanner;
 
@@ -26,32 +27,75 @@ public class EmptyScanner implements Scanner {
   
   private final File basedir;
   
+  /**
+   * <p>Constructor for EmptyScanner.</p>
+   *
+   * @param basedir a {@link java.io.File} object.
+   */
   public EmptyScanner(File basedir) {
     this.basedir = basedir;
   }
 
+  /**
+   * <p>addDefaultExcludes.</p>
+   */
   public void addDefaultExcludes() {
   }
 
+  /**
+   * <p>getIncludedDirectories.</p>
+   *
+   * @return an array of {@link java.lang.String} objects.
+   */
   public String[] getIncludedDirectories() {
     return EMPTY_STRING_ARRAY;
   }
 
+  /**
+   * <p>getIncludedFiles.</p>
+   *
+   * @return an array of {@link java.lang.String} objects.
+   */
   public String[] getIncludedFiles() {
     return EMPTY_STRING_ARRAY;
   }
 
+  /**
+   * <p>scan.</p>
+   */
   public void scan() {
   }
 
+  /**
+   * <p>setExcludes.</p>
+   *
+   * @param excludes an array of {@link java.lang.String} objects.
+   */
   public void setExcludes(String[] excludes) {
   }
 
+  /**
+   * <p>setIncludes.</p>
+   *
+   * @param includes an array of {@link java.lang.String} objects.
+   */
   public void setIncludes(String[] includes) {
   }
 
+  /**
+   * <p>Getter for the field <code>basedir</code>.</p>
+   *
+   * @return a {@link java.io.File} object.
+   */
   public File getBasedir() {
     return basedir;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void setFilenameComparator( Comparator<String> comparator )
+  {
+
   }
 
 }

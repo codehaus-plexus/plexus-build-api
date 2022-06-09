@@ -19,67 +19,91 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
 
 /**
  * Filesystem based non-incremental build context implementation which behaves as if all files
- * were just created. More specifically, 
- * 
+ * were just created. More specifically,
+ *
  * hasDelta returns <code>true</code> for all paths
  * newScanner returns Scanner that scans all files under provided basedir
  * newDeletedScanner always returns empty scanner.
- * isIncremental returns <code>false</code<
- * getValue always returns <code>null</code>
- * 
- * @plexus.component role="org.sonatype.plexus.build.incremental.BuildContext"
- *                   role-hint="default"
+ * isIncremental returns false
+ * getValue always returns null
  */
+@Component( role = BuildContext.class, hint = "default")
 public class DefaultBuildContext extends AbstractLogEnabled implements BuildContext {
 
+  /** {@inheritDoc} */
   public boolean hasDelta(String relpath) {
     return true;
   }
 
+  /**
+   * <p>hasDelta.</p>
+   *
+   * @param file a {@link java.io.File} object.
+   * @return a boolean.
+   */
   public boolean hasDelta(File file) {
     return true;
   }
 
+  /**
+   * <p>hasDelta.</p>
+   *
+   * @param relpaths a {@link java.util.List} object.
+   * @return a boolean.
+   */
   public boolean hasDelta(List<String> relpaths) {
     return true;
   }
 
+  /** {@inheritDoc} */
   public OutputStream newFileOutputStream(File file) throws IOException {
     return new FileOutputStream(file);
   }
 
+  /** {@inheritDoc} */
   public Scanner newScanner(File basedir) {
     DirectoryScanner ds = new DirectoryScanner();
     ds.setBasedir(basedir);
     return ds;
   }
 
+  /** {@inheritDoc} */
   public void refresh(File file) {
     // do nothing
   }
 
+  /** {@inheritDoc} */
   public Scanner newDeleteScanner(File basedir) {
     return new EmptyScanner(basedir);
   }
 
+  /** {@inheritDoc} */
   public Scanner newScanner(File basedir, boolean ignoreDelta) {
     return newScanner(basedir);
   }
 
+  /**
+   * <p>isIncremental.</p>
+   *
+   * @return a boolean.
+   */
   public boolean isIncremental() {
     return false;
   }
 
+  /** {@inheritDoc} */
   public Object getValue(String key) {
     return null;
   }
 
+  /** {@inheritDoc} */
   public void setValue(String key, Object value) {
   }
 
@@ -87,20 +111,17 @@ public class DefaultBuildContext extends AbstractLogEnabled implements BuildCont
     return file.getAbsolutePath() + " [" + line + ':' + column + "]: " + message;
   }
 
-  /**
-   * @deprecated Use addMessage with severity=SEVERITY_ERROR instead
-   */
+  /** {@inheritDoc} */
   public void addError(File file, int line, int column, String message, Throwable cause) {
     addMessage(file, line, column, message, SEVERITY_ERROR, cause);
   }
 
-  /**
-   * @deprecated Use addMessage with severity=SEVERITY_WARNING instead
-   */
+  /** {@inheritDoc} */
   public void addWarning(File file, int line, int column, String message, Throwable cause) {
     addMessage(file, line, column, message, SEVERITY_WARNING, cause);
   }
 
+  /** {@inheritDoc} */
   public void addMessage(File file, int line, int column, String message, int severity, Throwable cause) {
     switch(severity) {
       case BuildContext.SEVERITY_ERROR:
@@ -113,9 +134,11 @@ public class DefaultBuildContext extends AbstractLogEnabled implements BuildCont
     throw new IllegalArgumentException("severity=" + severity);
   }
 
+  /** {@inheritDoc} */
   public void removeMessages(File file) {
   }
 
+  /** {@inheritDoc} */
   public boolean isUptodate(File target, File source) {
     return target != null && target.exists() && source != null && source.exists()
         && target.lastModified() > source.lastModified();

@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -65,6 +66,12 @@ public class TestIncrementalBuildContext implements BuildContext {
 
     public File getBasedir() {
       return basedir;
+    }
+
+    @Override
+    public void setFilenameComparator( Comparator<String> filenameComparator )
+    {
+
     }
   }
 

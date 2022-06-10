@@ -17,7 +17,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
   <parent>
     <groupId>org.codehaus.plexus</groupId>
     <artifactId>plexus</artifactId>
-    <version>8</version>
+    <version>10</version>
   </parent>
 
   <artifactId>plexus-build-api</artifactId>

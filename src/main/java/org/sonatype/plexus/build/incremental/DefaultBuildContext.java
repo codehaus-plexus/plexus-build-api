@@ -13,16 +13,19 @@ See the Apache License Version 2.0 for the specific language governing permissio
 
 package org.sonatype.plexus.build.incremental;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Filesystem based non-incremental build context implementation which behaves as if all files
@@ -34,9 +37,11 @@ import org.codehaus.plexus.util.Scanner;
  * isIncremental returns false
  * getValue always returns null
  */
-@Component( role = BuildContext.class, hint = "default")
-public class DefaultBuildContext extends AbstractLogEnabled implements BuildContext {
+@Named("default")
+@Singleton
+public class DefaultBuildContext implements BuildContext {
 
+  private final Logger logger = LoggerFactory.getLogger(DefaultBuildContext.class);
   /** {@inheritDoc} */
   public boolean hasDelta(String relpath) {
     return true;
@@ -125,10 +130,10 @@ public class DefaultBuildContext extends AbstractLogEnabled implements BuildCont
   public void addMessage(File file, int line, int column, String message, int severity, Throwable cause) {
     switch(severity) {
       case BuildContext.SEVERITY_ERROR:
-        getLogger().error(getMessage(file, line, column, message), cause);
+        logger.error(getMessage(file, line, column, message), cause);
         return;
       case BuildContext.SEVERITY_WARNING:
-        getLogger().warn(getMessage(file, line, column, message), cause);
+        logger.warn(getMessage(file, line, column, message), cause);
         return;
     }
     throw new IllegalArgumentException("severity=" + severity);

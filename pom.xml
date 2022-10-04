@@ -22,6 +22,12 @@ See the Apache License Version 2.0 for the specific language governing permissio
 
   <artifactId>plexus-build-api</artifactId>
   <version>1.0.0-SNAPSHOT</version>
+
+  <scm>
+    <connection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</connection>
+    <developerConnection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</developerConnection>
+    <url>https://github.com/codehaus-plexus/plexus-build-api</url>
+  </scm>
   
   <dependencies>
     <dependency>
@@ -93,7 +99,4 @@ See the Apache License Version 2.0 for the specific language governing permissio
     </plugins>
   </build>
 
-  <scm>
-    <tag>plexus-build-api-1.0.0</tag>
-  </scm>
 </project>

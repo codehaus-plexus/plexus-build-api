@@ -21,7 +21,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
   </parent>
 
   <artifactId>plexus-build-api</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   
   <dependencies>
     <dependency>

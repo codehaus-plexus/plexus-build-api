@@ -11,7 +11,7 @@ software distributed under the Apache License Version 2.0 is distributed on an
 See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 */
 
-package org.sonatype.plexus.build.incremental;
+package org.codehaus.plexus.build.incremental;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import org.codehaus.plexus.util.Scanner;
 /**
  * BuildContext implementation that delegates actual work to thread-local
  * build context set using {@link #setThreadBuildContext(BuildContext)}.
- * {@link org.sonatype.plexus.build.incremental.DefaultBuildContext} is used if no thread local build context was set.
+ * {@link DefaultBuildContext} is used if no thread local build context was set.
  *
  * Note that plexus component metadata is not generated for this implementation.
  * Apparently, older version of plexus used by maven-filtering and likely
@@ -47,7 +47,7 @@ public class ThreadBuildContext implements BuildContext {
   /**
    * <p>getContext.</p>
    *
-   * @return a {@link org.sonatype.plexus.build.incremental.BuildContext} object.
+   * @return a {@link BuildContext} object.
    */
   public static BuildContext getContext() {
     return threadContext.get();
@@ -56,7 +56,7 @@ public class ThreadBuildContext implements BuildContext {
   /**
    * <p>setThreadBuildContext.</p>
    *
-   * @param context a {@link org.sonatype.plexus.build.incremental.BuildContext} object.
+   * @param context a {@link BuildContext} object.
    */
   public static void setThreadBuildContext(BuildContext context) {
     threadContext.set(context);

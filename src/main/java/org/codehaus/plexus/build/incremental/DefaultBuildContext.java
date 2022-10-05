@@ -11,15 +11,15 @@ software distributed under the Apache License Version 2.0 is distributed on an
 See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 */
 
-package org.sonatype.plexus.build.incremental;
+package org.codehaus.plexus.build.incremental;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.codehaus.plexus.util.DirectoryScanner;
@@ -69,7 +69,7 @@ public class DefaultBuildContext implements BuildContext {
 
   /** {@inheritDoc} */
   public OutputStream newFileOutputStream(File file) throws IOException {
-    return new FileOutputStream(file);
+    return Files.newOutputStream(file.toPath());
   }
 
   /** {@inheritDoc} */

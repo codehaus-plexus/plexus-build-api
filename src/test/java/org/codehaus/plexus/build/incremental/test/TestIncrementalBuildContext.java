@@ -11,7 +11,7 @@ software distributed under the Apache License Version 2.0 is distributed on an
 See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 */
 
-package org.sonatype.plexus.build.incremental.test;
+package org.codehaus.plexus.build.incremental.test;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,7 +27,7 @@ import java.util.Set;
 
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
-import org.sonatype.plexus.build.incremental.BuildContext;
+import org.codehaus.plexus.build.incremental.BuildContext;
 
 public class TestIncrementalBuildContext implements BuildContext {
 
@@ -52,7 +52,7 @@ public class TestIncrementalBuildContext implements BuildContext {
     }
 
     public String[] getIncludedFiles() {
-      return (String[]) files.toArray(new String[files.size()]);
+      return (String[]) files.toArray(new String[0]);
     }
 
     public void scan() {

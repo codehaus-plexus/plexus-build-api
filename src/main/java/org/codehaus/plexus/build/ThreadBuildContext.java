@@ -11,7 +11,7 @@ software distributed under the Apache License Version 2.0 is distributed on an
 See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 */
 
-package org.codehaus.plexus.build.incremental;
+package org.codehaus.plexus.build;
 
 import java.io.File;
 import java.io.IOException;
@@ -143,12 +143,12 @@ public class ThreadBuildContext implements BuildContext {
 
   /** {@inheritDoc} */
   public void addWarning(File file, int line, int column, String message, Throwable cause) {
-    addMessage(file, line, column, message, BuildContext.SEVERITY_WARNING, cause);
+    addMessage(file, line, column, message, SEVERITY_WARNING, cause);
   }
 
   /** {@inheritDoc} */
   public void addError(File file, int line, int column, String message, Throwable cause) {
-    addMessage(file, line, column, message, BuildContext.SEVERITY_ERROR, cause);
+    addMessage(file, line, column, message, SEVERITY_ERROR, cause);
   }
 
   /** {@inheritDoc} */

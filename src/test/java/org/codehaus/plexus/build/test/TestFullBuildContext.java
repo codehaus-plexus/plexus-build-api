@@ -11,11 +11,11 @@ software distributed under the Apache License Version 2.0 is distributed on an
 See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 */
 
-package org.sonatype.plexus.build.incremental.test;
+package org.codehaus.plexus.build.test;
 
 import java.util.Map;
 
-import org.sonatype.plexus.build.incremental.DefaultBuildContext;
+import org.codehaus.plexus.build.DefaultBuildContext;
 
 
 public class TestFullBuildContext extends DefaultBuildContext {

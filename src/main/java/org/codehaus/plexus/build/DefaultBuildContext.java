@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
@@ -28,19 +30,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Filesystem based non-incremental build context implementation which behaves as if all files
- * were just created. More specifically,
+ * Filesystem based non-incremental build context implementation which behaves
+ * as if all files were just created. More specifically,
  *
- * hasDelta returns <code>true</code> for all paths
- * newScanner returns Scanner that scans all files under provided basedir
- * newDeletedScanner always returns empty scanner.
- * isIncremental returns false
- * getValue always returns null
+ * <ol>
+ * <li>hasDelta returns <code>true</code> for all paths</li>
+ * <li>newScanner returns Scanner that scans all files under provided
+ * basedir</li>
+ * <li>newDeletedScanner always returns empty scanner</li>
+ * <li>isIncremental returns <code>false</code></li>
+ * <li>getValue always returns the last set value in this session and only
+ * stores to memory</li>
+ * </ol>
  */
 @Named("default")
 @Singleton
 public class DefaultBuildContext implements BuildContext {
 
+    private final Map<String, Object> contextMap = new ConcurrentHashMap<>();
   private final Logger logger = LoggerFactory.getLogger(DefaultBuildContext.class);
   /** {@inheritDoc} */
   public boolean hasDelta(String relpath) {
@@ -105,11 +112,12 @@ public class DefaultBuildContext implements BuildContext {
 
   /** {@inheritDoc} */
   public Object getValue(String key) {
-    return null;
+      return contextMap.get(key);
   }
 
   /** {@inheritDoc} */
   public void setValue(String key, Object value) {
+      contextMap.put(key, value);
   }
 
   private String getMessage(File file, int line, int column, String message) {

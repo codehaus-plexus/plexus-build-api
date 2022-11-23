@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,6 +48,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DefaultBuildContext implements BuildContext {
 
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
     private final Map<String, Object> contextMap = new ConcurrentHashMap<>();
   private final Logger logger = LoggerFactory.getLogger(DefaultBuildContext.class);
   /** {@inheritDoc} */
@@ -93,7 +95,43 @@ public class DefaultBuildContext implements BuildContext {
 
   /** {@inheritDoc} */
   public Scanner newDeleteScanner(File basedir) {
-    return new EmptyScanner(basedir);
+      return new Scanner() {
+          @Override
+          public void addDefaultExcludes() {
+          }
+
+          @Override
+          public String[] getIncludedDirectories() {
+              return EMPTY_STRING_ARRAY;
+          }
+
+          @Override
+          public String[] getIncludedFiles() {
+              return EMPTY_STRING_ARRAY;
+          }
+
+          @Override
+          public void scan() {
+          }
+
+          @Override
+          public void setExcludes(String[] excludes) {
+          }
+
+          @Override
+          public void setIncludes(String[] includes) {
+          }
+
+          @Override
+          public File getBasedir() {
+              return basedir;
+          }
+
+          @Override
+          public void setFilenameComparator(Comparator<String> comparator) {
+
+          }
+      };
   }
 
   /** {@inheritDoc} */

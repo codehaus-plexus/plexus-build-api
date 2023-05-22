@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 Copyright (c) 2008 Sonatype, Inc. All rights reserved.
 
@@ -10,7 +11,6 @@ software distributed under the Apache License Version 2.0 is distributed on an
 "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -26,10 +26,10 @@ See the Apache License Version 2.0 for the specific language governing permissio
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</connection>
     <developerConnection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</developerConnection>
-    <url>https://github.com/codehaus-plexus/plexus-build-api</url>
     <tag>HEAD</tag>
+    <url>https://github.com/codehaus-plexus/plexus-build-api</url>
   </scm>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -51,8 +51,8 @@ See the Apache License Version 2.0 for the specific language governing permissio
   <build>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
         <filtering>true</filtering>
+        <directory>src/main/resources</directory>
       </resource>
     </resources>
     <plugins>
@@ -61,14 +61,14 @@ See the Apache License Version 2.0 for the specific language governing permissio
         <artifactId>sisu-maven-plugin</artifactId>
         <version>0.3.5</version>
         <executions>
-            <execution>
-              <id>index-project</id>
-              <goals>
-                <goal>main-index</goal>
-                <goal>test-index</goal>
-              </goals>
-            </execution>
-          </executions>
+          <execution>
+            <id>index-project</id>
+            <goals>
+              <goal>main-index</goal>
+              <goal>test-index</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

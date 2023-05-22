@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
+import org.codehaus.plexus.util.io.CachingOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,7 @@ public class DefaultBuildContext implements BuildContext {
 
   /** {@inheritDoc} */
   public OutputStream newFileOutputStream(File file) throws IOException {
-    return Files.newOutputStream(file.toPath());
+    return new CachingOutputStream(file.toPath());
   }
 
   /** {@inheritDoc} */

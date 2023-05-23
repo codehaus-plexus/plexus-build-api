@@ -25,9 +25,9 @@ See the Apache License Version 2.0 for the specific language governing permissio
 
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</connection>
-    <developerConnection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://github.com/codehaus-plexus/plexus-build-api</url>
+    <developerConnection>${project.scm.connection}</developerConnection>
+    <tag>master</tag>
+    <url>https://github.com/codehaus-plexus/plexus-build-api/tree/master</url>
   </scm>
 
   <dependencies>
@@ -94,6 +94,24 @@ See the Apache License Version 2.0 for the specific language governing permissio
             <goals>
               <goal>test-jar</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <configuration>
+          <content>${project.reporting.outputDirectory}</content>
+          <!-- mono-module doesn't require site:stage -->
+        </configuration>
+        <executions>
+          <execution>
+            <id>scm-publish</id>
+            <!-- deploy site with maven-scm-publish-plugin -->
+            <goals>
+              <goal>publish-scm</goal>
+            </goals>
+            <phase>site-deploy</phase>
           </execution>
         </executions>
       </plugin>

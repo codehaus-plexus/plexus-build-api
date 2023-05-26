@@ -21,7 +21,14 @@ See the Apache License Version 2.0 for the specific language governing permissio
   <groupId>org.sonatype.plexus</groupId>
   <artifactId>plexus-build-api</artifactId>
   <version>0.0.8-SNAPSHOT</version>
-  
+
+  <scm>
+    <connection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</connection>
+    <developerConnection>${project.scm.connection}</developerConnection>
+    <url>https://github.com/codehaus-plexus/plexus-build-api</url>
+    <tag>0.x</tag>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -36,6 +43,10 @@ See the Apache License Version 2.0 for the specific language governing permissio
     </dependency>
   </dependencies>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <build>
     <resources>
       <resource>
@@ -47,7 +58,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
       <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
-        <version>1.3.4</version>
+        <version>1.3.8</version>
         <executions>
           <execution>
             <goals>
@@ -58,16 +69,21 @@ See the Apache License Version 2.0 for the specific language governing permissio
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
         <configuration>
-          <source>1.4</source>
-          <target>1.4</target>
+          <release>8</release>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.4.2</version>
+        <version>3.1.0</version>
         <configuration>
           <skipTests>true</skipTests>
         </configuration>
@@ -75,6 +91,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
         <executions>
           <execution>
             <goals>
@@ -82,6 +99,34 @@ See the Apache License Version 2.0 for the specific language governing permissio
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+          <doclint>none</doclint>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>3.1.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.1.1</version>
       </plugin>
     </plugins>
   </build>

@@ -20,13 +20,13 @@ See the Apache License Version 2.0 for the specific language governing permissio
   </parent>
   <groupId>org.sonatype.plexus</groupId>
   <artifactId>plexus-build-api</artifactId>
-  <version>0.0.8</version>
+  <version>0.0.9-SNAPSHOT</version>
 
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</connection>
     <developerConnection>${project.scm.connection}</developerConnection>
     <url>https://github.com/codehaus-plexus/plexus-build-api</url>
-    <tag>plexus-build-api-0.0.8</tag>
+    <tag>0.x</tag>
   </scm>
 
   <dependencies>

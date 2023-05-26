@@ -51,7 +51,7 @@ public class DefaultBuildContext extends AbstractLogEnabled implements BuildCont
   }
 
   public OutputStream newFileOutputStream(File file) throws IOException {
-    return new FileOutputStream(file);
+    return new CachingOutputStream(file);
   }
 
   public Scanner newScanner(File basedir) {

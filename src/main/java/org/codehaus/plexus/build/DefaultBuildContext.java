@@ -13,6 +13,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
 
 package org.codehaus.plexus.build;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.Scanner;
 import org.codehaus.plexus.util.io.CachingOutputStream;
 import org.slf4j.Logger;
@@ -47,11 +48,28 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DefaultBuildContext implements BuildContext {
 
-    private final Map<String, Object> contextMap = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(DefaultBuildContext.class);
+    // the legacy API requires the AbstractLogEnabled we just have it here to get
+    // compile errors in case it is missing from the classpath!
+    @SuppressWarnings("unused")
+    private static final AbstractLogEnabled DUMMY = null;
+
+    private final Map<String, Object> contextMap = new ConcurrentHashMap<>();
+    private org.sonatype.plexus.build.incremental.BuildContext legacy;
+
+    /**
+     * @param legacy the legacy API we delegate to by default, this allow us to
+     *               support "older" plugins and implementors of the API while still
+     *               having a way to move forward!
+     */
+    @Inject
+    public DefaultBuildContext(org.sonatype.plexus.build.incremental.BuildContext legacy) {
+        this.legacy = legacy;
+    }
+
     /** {@inheritDoc} */
     public boolean hasDelta(String relpath) {
-        return true;
+        return legacy.hasDelta(relpath);
     }
 
     /**
@@ -61,7 +79,7 @@ public class DefaultBuildContext implements BuildContext {
      * @return a boolean.
      */
     public boolean hasDelta(File file) {
-        return true;
+        return legacy.hasDelta(file);
     }
 
     /**
@@ -71,34 +89,44 @@ public class DefaultBuildContext implements BuildContext {
      * @return a boolean.
      */
     public boolean hasDelta(List<String> relpaths) {
-        return true;
+        return legacy.hasDelta(relpaths);
     }
 
     /** {@inheritDoc} */
     public OutputStream newFileOutputStream(File file) throws IOException {
-        return new CachingOutputStream(file.toPath());
+        if (isDefaultImplementation()) {
+            return new CachingOutputStream(file.toPath());
+        }
+        return legacy.newFileOutputStream(file);
+    }
+
+    /**
+     * @return <code>true</code> if the legacy is the default implementation and we
+     *         can safely override/change behavior here, or <code>false</code> if a
+     *         custom implementation is used and full delegation is required.
+     */
+    private boolean isDefaultImplementation() {
+        return legacy.getClass().equals(org.sonatype.plexus.build.incremental.DefaultBuildContext.class);
     }
 
     /** {@inheritDoc} */
     public Scanner newScanner(File basedir) {
-        DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir(basedir);
-        return ds;
+        return legacy.newScanner(basedir);
     }
 
     /** {@inheritDoc} */
     public void refresh(File file) {
-        // do nothing
+        legacy.refresh(file);
     }
 
     /** {@inheritDoc} */
     public Scanner newDeleteScanner(File basedir) {
-        return new EmptyScanner(basedir);
+        return legacy.newDeleteScanner(basedir);
     }
 
     /** {@inheritDoc} */
     public Scanner newScanner(File basedir, boolean ignoreDelta) {
-        return newScanner(basedir);
+        return legacy.newScanner(basedir, ignoreDelta);
     }
 
     /**
@@ -107,7 +135,7 @@ public class DefaultBuildContext implements BuildContext {
      * @return a boolean.
      */
     public boolean isIncremental() {
-        return false;
+        return legacy.isIncremental();
     }
 
     /** {@inheritDoc} */
@@ -120,10 +148,6 @@ public class DefaultBuildContext implements BuildContext {
         contextMap.put(key, value);
     }
 
-    private String getMessage(File file, int line, int column, String message) {
-        return file.getAbsolutePath() + " [" + line + ':' + column + "]: " + message;
-    }
-
     /** {@inheritDoc} */
     public void addError(File file, int line, int column, String message, Throwable cause) {
         addMessage(file, line, column, message, SEVERITY_ERROR, cause);
@@ -134,28 +158,38 @@ public class DefaultBuildContext implements BuildContext {
         addMessage(file, line, column, message, SEVERITY_WARNING, cause);
     }
 
-    /** {@inheritDoc} */
-    public void addMessage(File file, int line, int column, String message, int severity, Throwable cause) {
-        switch (severity) {
-            case BuildContext.SEVERITY_ERROR:
-                logger.error(getMessage(file, line, column, message), cause);
-                return;
-            case BuildContext.SEVERITY_WARNING:
-                logger.warn(getMessage(file, line, column, message), cause);
-                return;
-        }
-        throw new IllegalArgumentException("severity=" + severity);
+    private String getMessage(File file, int line, int column, String message) {
+        return file.getAbsolutePath() + " [" + line + ':' + column + "]: " + message;
     }
 
     /** {@inheritDoc} */
-    public void removeMessages(File file) {}
+    public void addMessage(File file, int line, int column, String message, int severity, Throwable cause) {
+        if (isDefaultImplementation()) {
+            switch (severity) {
+                case BuildContext.SEVERITY_ERROR:
+                    logger.error(getMessage(file, line, column, message), cause);
+                    return;
+                case BuildContext.SEVERITY_WARNING:
+                    logger.warn(getMessage(file, line, column, message), cause);
+                    return;
+                default:
+                    logger.debug(getMessage(file, line, column, message), cause);
+                    return;
+            }
+        }
+        legacy.addMessage(file, line, column, message, severity, cause);
+    }
+
+    /** {@inheritDoc} */
+    public void removeMessages(File file) {
+        if (isDefaultImplementation()) {
+            return;
+        }
+        legacy.removeMessages(file);
+    }
 
     /** {@inheritDoc} */
     public boolean isUptodate(File target, File source) {
-        return target != null
-                && target.exists()
-                && source != null
-                && source.exists()
-                && target.lastModified() > source.lastModified();
+        return legacy.isUptodate(target, source);
     }
 }

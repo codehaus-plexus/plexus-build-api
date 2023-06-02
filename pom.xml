@@ -46,6 +46,30 @@ See the Apache License Version 2.0 for the specific language governing permissio
       <artifactId>slf4j-api</artifactId>
       <version>1.7.36</version>
     </dependency>
+    <!-- The depednecies are only to support the legacy API therefore we exclude anything as we only need the API/classes -->
+    <dependency>
+      <groupId>org.sonatype.plexus</groupId>
+      <artifactId>plexus-build-api</artifactId>
+      <version>0.0.7</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.sisu</groupId>
+      <artifactId>org.eclipse.sisu.plexus</artifactId>
+      <version>0.9.0.M2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
   </dependencies>
 
   <build>

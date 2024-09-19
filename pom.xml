@@ -44,7 +44,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.36</version>
+      <version>2.0.0</version>
     </dependency>
     <!-- The dependencies are only to support the legacy API therefore we exclude anything as we only need the API/classes -->
     <dependency>

@@ -12,69 +12,83 @@ See the Apache License Version 2.0 for the specific language governing permissio
 */
 package org.codehaus.plexus.build.connect.messages;
 
-import java.io.File;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.maven.execution.ExecutionEvent.Type;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugin.MojoExecution;
 
 /**
- * Send to inform about project changes
+ * Mesaage generated when a mojo is executed
  */
-public class ProjectMessage extends Message {
+public class MojoMessage extends Message {
 
-    private static final String BASE_DIR = "baseDir";
+    private static final String GOAL = "goal";
+    private static final String LIFECYCLE_PHASE = "lifecyclePhase";
+    private static final String EXECUTION_ID = "executionId";
     private static final String VERSION = "version";
     private static final String ARTIFACT_ID = "artifactId";
     private static final String GROUP_ID = "groupId";
     private static final String EVENT_TYPE = "eventType";
 
-    ProjectMessage(String sessionId, long threadId, Map<String, String> payload) {
+    MojoMessage(String sessionId, long threadId, Map<String, String> payload) {
         super(sessionId, threadId, payload);
     }
 
     /**
-     * Constructs a new event based on project and type
+     * Creates a Mojo message from execution and type
      *
-     * @param mavenProject
-     * @param eventtype
+     * @param mojoExecution
+     * @param type
      */
-    public ProjectMessage(MavenProject mavenProject, Type eventtype) {
-        super(toMap(mavenProject, eventtype));
+    public MojoMessage(MojoExecution mojoExecution, Type type) {
+        super(toMap(mojoExecution, type));
     }
 
     /**
-     * @return the group id of the project
+     * @return the group id
      */
     public String getGroupId() {
         return getProperty(GROUP_ID);
     }
 
     /**
-     * @return the artifact id of the project
+     * @return the artifact id
      */
     public String getArtifactId() {
         return getProperty(ARTIFACT_ID);
     }
 
     /**
-     * @return the version of the project
+     * @return the version
      */
     public String getVersion() {
-        return getProperty(ARTIFACT_ID);
+        return getProperty(VERSION);
     }
 
     /**
-     * @return the basedir of the project
+     * @return the execution id
      */
-    public Path getBaseDir() {
-        return new File(getProperty(BASE_DIR)).toPath();
+    public String getExecutionId() {
+        return getProperty(EXECUTION_ID);
     }
 
     /**
-     * @return the type of the event
+     * @return the lifecycle phase
+     */
+    public String getLifecyclePhase() {
+        return getProperty(LIFECYCLE_PHASE);
+    }
+
+    /**
+     * @return the lifecycle phase
+     */
+    public String getGoal() {
+        return getProperty(GOAL);
+    }
+
+    /**
+     * @return the type of event
      */
     public EventType getType() {
         try {
@@ -84,38 +98,40 @@ public class ProjectMessage extends Message {
         }
     }
 
-    private static Map<String, String> toMap(MavenProject mavenProject, Type eventtype) {
+    private static Map<String, String> toMap(MojoExecution mojoExecution, Type type) {
         Map<String, String> map = new HashMap<>();
-        map.put(EVENT_TYPE, eventtype.name());
-        map.put(GROUP_ID, mavenProject.getGroupId());
-        map.put(ARTIFACT_ID, mavenProject.getArtifactId());
-        map.put(VERSION, mavenProject.getVersion());
-        map.put(BASE_DIR, mavenProject.getBasedir().getAbsolutePath());
+        map.put(EVENT_TYPE, type.name());
+        map.put(GROUP_ID, mojoExecution.getGroupId());
+        map.put(ARTIFACT_ID, mojoExecution.getArtifactId());
+        map.put(VERSION, mojoExecution.getVersion());
+        map.put(EXECUTION_ID, mojoExecution.getExecutionId());
+        map.put(LIFECYCLE_PHASE, mojoExecution.getLifecyclePhase());
+        map.put(GOAL, mojoExecution.getGoal());
         return map;
     }
 
     /**
-     * Describe the type of the event
+     * create the event type
      */
     public static enum EventType {
         /**
-         * The project was started
+         * the mojo was started
          */
-        ProjectStarted,
+        MojoStarted,
         /**
-         * The project failed
+         * The mojo failed
          */
-        ProjectFailed,
+        MojoFailed,
         /**
-         * The project was skipped
+         * The mojo was skipped
          */
-        ProjectSkipped,
+        MojoSkipped,
         /**
-         * the project succeed
+         * The mojo succeed
          */
-        ProjectSucceeded,
+        MojoSucceeded,
         /**
-         * the type of event is unknown
+         * the type is unknown
          */
         Unknown;
     }

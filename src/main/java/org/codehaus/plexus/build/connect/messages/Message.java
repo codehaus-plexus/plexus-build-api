@@ -207,6 +207,9 @@ public class Message {
             if ("ProjectMessage".equals(messageType)) {
                 return new ProjectMessage(sessionId, threadId, payload);
             }
+            if ("MojoMessage".equals(messageType)) {
+                return new MojoMessage(sessionId, threadId, payload);
+            }
             return new Message(sessionId, threadId, payload);
         } catch (IOException e) {
             // should never happen, but if it happens something is wrong!
@@ -236,5 +239,27 @@ public class Message {
             stream.writeInt(bytes.length);
             stream.write(bytes);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(properties, sessionId, threadId);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Message other = (Message) obj;
+        return Objects.equals(properties, other.properties)
+                && Objects.equals(sessionId, other.sessionId)
+                && threadId == other.threadId;
     }
 }

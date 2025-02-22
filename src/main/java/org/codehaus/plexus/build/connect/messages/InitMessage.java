@@ -12,7 +12,11 @@ See the Apache License Version 2.0 for the specific language governing permissio
 */
 package org.codehaus.plexus.build.connect.messages;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
+
+import org.apache.maven.eventspy.EventSpy.Context;
 
 /**
  * Message send to init the inital communication with the endpoints
@@ -22,10 +26,26 @@ public class InitMessage extends Message {
     /**
      * Creates a message with inital information about the running maven system
      *
-     * @param settings the context settings to send to the endpoint
+     * @param context the context settings to send to the endpoint
      */
-    public InitMessage(Map<String, String> settings) {
-        super(settings);
+    public InitMessage(Context context) {
+        super(toMap(context));
+    }
+
+    private static Map<String, String> toMap(Context context) {
+        Map<String, String> data = new LinkedHashMap<>();
+        context.getData().forEach((k, v) -> {
+            if (v instanceof String) {
+                data.put(k, (String) v);
+            }
+            if (v instanceof Properties) {
+                Properties properties = (Properties) v;
+                for (String p : properties.stringPropertyNames()) {
+                    data.put(k + "." + p, properties.getProperty(p));
+                }
+            }
+        });
+        return data;
     }
 
     InitMessage(String sessionId, long threadId, Map<String, String> payload) {

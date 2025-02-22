@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 /**
  * A message exchanged between two endpoints, usually an IDE and a maven build
@@ -50,6 +51,13 @@ public class Message {
         this.sessionId = sessionId;
         this.properties = Objects.requireNonNull(payload);
         this.threadId = threadId;
+    }
+
+    /**
+     * @return the keys stored in this message
+     */
+    public Stream<String> keys() {
+        return properties.keySet().stream();
     }
 
     /**
@@ -187,11 +195,17 @@ public class Message {
             if ("SessionMessage".equals(messageType)) {
                 return new SessionMessage(sessionId, threadId, payload);
             }
-            if ("ProjectsReadMessage".equals(messageType)) {
-                return new ProjectsReadMessage(sessionId, threadId, payload);
+            if ("ProjectsMessage".equals(messageType)) {
+                return new ProjectsMessage(sessionId, threadId, payload);
             }
             if ("RefreshMessage".equals(messageType)) {
                 return new RefreshMessage(sessionId, threadId, payload);
+            }
+            if ("InitMessage".equals(messageType)) {
+                return new InitMessage(sessionId, threadId, payload);
+            }
+            if ("ProjectMessage".equals(messageType)) {
+                return new ProjectMessage(sessionId, threadId, payload);
             }
             return new Message(sessionId, threadId, payload);
         } catch (IOException e) {

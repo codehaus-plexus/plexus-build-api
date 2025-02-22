@@ -13,7 +13,6 @@ See the Apache License Version 2.0 for the specific language governing permissio
 package org.codehaus.plexus.build.connect;
 
 import org.codehaus.plexus.build.connect.messages.Message;
-import org.codehaus.plexus.build.connect.messages.ProjectsReadMessage;
 
 /**
  * Provides access to the configuration provided by the server
@@ -21,14 +20,12 @@ import org.codehaus.plexus.build.connect.messages.ProjectsReadMessage;
 public interface Configuration {
 
     /**
-     * If this property is set to <code>true</code> in reply to a session start, a
-     * {@link ProjectsReadMessage} will be send to the endpoint containing all
-     * projects with their effective model
+     * If this property is set to <code>true</code> in reply to a InitMessage
      */
-    public static final String CONFIG_SEND_AFTER_PROJECTS_READ = "afterProjectsRead";
+    public static final String CONFIG_SEND_PROJECTS = "sendProjectInfos";
 
     /**
-     * @return <code>true</code> if {@link #CONFIG_SEND_AFTER_PROJECTS_READ} is
+     * @return <code>true</code> if {@link #CONFIG_SEND_PROJECTS} is
      *         provided
      */
     public boolean isSendProjects();
@@ -44,7 +41,7 @@ public interface Configuration {
 
             @Override
             public boolean isSendProjects() {
-                return message.getBooleanProperty(CONFIG_SEND_AFTER_PROJECTS_READ, false);
+                return message.getBooleanProperty(CONFIG_SEND_PROJECTS, false);
             }
         };
     }

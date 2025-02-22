@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.maven.plugin.LegacySupport;
 import org.codehaus.plexus.build.connect.BuildConnection;
 import org.codehaus.plexus.build.connect.messages.RefreshMessage;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -59,17 +60,23 @@ public class DefaultBuildContext implements BuildContext {
     private final Map<String, Object> contextMap = new ConcurrentHashMap<>();
     private org.sonatype.plexus.build.incremental.BuildContext legacy;
     private BuildConnection connection;
+    private LegacySupport legacySupport;
 
     /**
-     * @param legacy     the legacy API we delegate to by default, this allow us to
-     *                   support "older" plugins and implementors of the API while
-     *                   still having a way to move forward!
-     * @param connection the connection we use to forward refresh events
+     * @param legacy        the legacy API we delegate to by default, this allow us
+     *                      to support "older" plugins and implementors of the API
+     *                      while still having a way to move forward!
+     * @param connection    the connection we use to forward refresh events
+     * @param legacySupport legacy support to get the current session
      */
     @Inject
-    public DefaultBuildContext(org.sonatype.plexus.build.incremental.BuildContext legacy, BuildConnection connection) {
+    public DefaultBuildContext(
+            org.sonatype.plexus.build.incremental.BuildContext legacy,
+            BuildConnection connection,
+            LegacySupport legacySupport) {
         this.legacy = legacy;
         this.connection = connection;
+        this.legacySupport = legacySupport;
     }
 
     /** {@inheritDoc} */
@@ -122,7 +129,7 @@ public class DefaultBuildContext implements BuildContext {
     /** {@inheritDoc} */
     public void refresh(File file) {
         legacy.refresh(file);
-        connection.send(new RefreshMessage(file.toPath()));
+        connection.send(new RefreshMessage(file.toPath()), legacySupport.getSession());
     }
 
     /** {@inheritDoc} */

@@ -14,10 +14,7 @@ package org.codehaus.plexus.build.connect.messages;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-import java.util.WeakHashMap;
 
-import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 
 /**
@@ -27,8 +24,6 @@ public class SessionMessage extends Message {
 
     private static final String SESSION_EXECUTION_ROOT_DIRECTORY = "sessionExecutionRootDirectory";
     private static final String SESSION_START = "sessionStart";
-    private static final String SESSION_ID = "sessionId";
-    private static final Map<MavenExecutionRequest, String> ID_MAP = new WeakHashMap<>();
 
     /**
      * Creates a new session message
@@ -45,10 +40,6 @@ public class SessionMessage extends Message {
         super(sessionId, threadId, payload);
     }
 
-    public String getSessionId() {
-        return getProperty(SESSION_ID);
-    }
-
     /**
      * @return <code>true</code> if this is a session start event
      */
@@ -63,26 +54,8 @@ public class SessionMessage extends Message {
         return getProperty(SESSION_EXECUTION_ROOT_DIRECTORY);
     }
 
-    /**
-     * Returns the unique ID for a session
-     *
-     * @param session the session to get an Id for
-     * @return the id of the session or the name of the current thread if the
-     *         session is <code>null</code>
-     */
-    public static synchronized String getId(MavenSession session) {
-        if (session == null) {
-            return Thread.currentThread().getName();
-        }
-        // we can't use the session itself as a key, because sessions might be cloned,
-        // but the execution request should (hopefully) stay constant...
-        return ID_MAP.computeIfAbsent(
-                session.getRequest(), x -> UUID.randomUUID().toString());
-    }
-
     private static Map<String, String> buildMap(MavenSession session, boolean start) {
         Map<String, String> map = new HashMap<>(2);
-        map.put(SESSION_ID, getId(session));
         map.put(SESSION_START, Boolean.toString(start));
         map.put(SESSION_EXECUTION_ROOT_DIRECTORY, session.getExecutionRootDirectory());
         return map;

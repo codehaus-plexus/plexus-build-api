@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.codehaus.plexus.build.connect.BuildConnection;
+import org.codehaus.plexus.build.connect.messages.RefreshMessage;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.Scanner;
 import org.codehaus.plexus.util.io.CachingOutputStream;
@@ -56,15 +58,18 @@ public class DefaultBuildContext implements BuildContext {
 
     private final Map<String, Object> contextMap = new ConcurrentHashMap<>();
     private org.sonatype.plexus.build.incremental.BuildContext legacy;
+    private BuildConnection connection;
 
     /**
-     * @param legacy the legacy API we delegate to by default, this allow us to
-     *               support "older" plugins and implementors of the API while still
-     *               having a way to move forward!
+     * @param legacy     the legacy API we delegate to by default, this allow us to
+     *                   support "older" plugins and implementors of the API while
+     *                   still having a way to move forward!
+     * @param connection the connection we use to forward refresh events
      */
     @Inject
-    public DefaultBuildContext(org.sonatype.plexus.build.incremental.BuildContext legacy) {
+    public DefaultBuildContext(org.sonatype.plexus.build.incremental.BuildContext legacy, BuildConnection connection) {
         this.legacy = legacy;
+        this.connection = connection;
     }
 
     /** {@inheritDoc} */
@@ -117,6 +122,7 @@ public class DefaultBuildContext implements BuildContext {
     /** {@inheritDoc} */
     public void refresh(File file) {
         legacy.refresh(file);
+        connection.send(new RefreshMessage(file.toPath()));
     }
 
     /** {@inheritDoc} */

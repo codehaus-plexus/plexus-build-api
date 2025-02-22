@@ -12,9 +12,6 @@ See the Apache License Version 2.0 for the specific language governing permissio
 */
 package org.codehaus.plexus.build.connect;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -25,6 +22,7 @@ import org.apache.maven.execution.ExecutionEvent.Type;
 import org.apache.maven.execution.MavenSession;
 import org.codehaus.plexus.build.connect.messages.InitMessage;
 import org.codehaus.plexus.build.connect.messages.Message;
+import org.codehaus.plexus.build.connect.messages.MojoMessage;
 import org.codehaus.plexus.build.connect.messages.ProjectMessage;
 import org.codehaus.plexus.build.connect.messages.ProjectsMessage;
 import org.codehaus.plexus.build.connect.messages.SessionMessage;
@@ -51,11 +49,7 @@ public class EventListener implements EventSpy {
 
     @Override
     public void init(Context context) throws Exception {
-        Map<String, String> data = new LinkedHashMap<>();
-        context.getData().forEach((k, v) -> {
-            data.put(k, String.valueOf(v));
-        });
-        Message message = connection.send(new InitMessage(data), null);
+        Message message = connection.send(new InitMessage(context), null);
         if (message != null) {
             configuration = Configuration.of(message);
         }
@@ -71,9 +65,9 @@ public class EventListener implements EventSpy {
         }
     }
 
-    private void handleExecutionEvent(ExecutionEvent executionEvent) {
-        MavenSession session = executionEvent.getSession();
-        Type type = executionEvent.getType();
+    private void handleExecutionEvent(ExecutionEvent event) {
+        MavenSession session = event.getSession();
+        Type type = event.getType();
         switch (type) {
             case SessionStarted:
                 connection.send(new SessionMessage(session, true), session);
@@ -88,7 +82,13 @@ public class EventListener implements EventSpy {
             case ProjectFailed:
             case ProjectSkipped:
             case ProjectSucceeded:
-                connection.send(new ProjectMessage(executionEvent.getProject(), type), session);
+                connection.send(new ProjectMessage(event.getProject(), type), session);
+                break;
+            case MojoStarted:
+            case MojoFailed:
+            case MojoSkipped:
+            case MojoSucceeded:
+                connection.send(new MojoMessage(event.getMojoExecution(), type), session);
                 break;
             default:
                 break;

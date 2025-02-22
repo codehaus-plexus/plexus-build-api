@@ -63,7 +63,7 @@ public class ProjectMessage extends Message {
      * @return the version of the project
      */
     public String getVersion() {
-        return getProperty(ARTIFACT_ID);
+        return getProperty(VERSION);
     }
 
     /**

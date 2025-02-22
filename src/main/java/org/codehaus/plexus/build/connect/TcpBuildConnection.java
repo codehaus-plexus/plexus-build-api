@@ -12,7 +12,6 @@ See the Apache License Version 2.0 for the specific language governing permissio
 */
 package org.codehaus.plexus.build.connect;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -25,16 +24,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import org.apache.maven.plugin.LegacySupport;
+import org.apache.maven.execution.MavenSession;
 import org.codehaus.plexus.build.connect.messages.Message;
-import org.codehaus.plexus.build.connect.messages.SessionMessage;
 
 /**
  * Default implementation using the system property
@@ -48,10 +47,7 @@ public class TcpBuildConnection implements BuildConnection {
 
     private static final int PORT = Integer.getInteger(PLEXUS_BUILD_IPC_PORT, 0);
 
-    @Inject
-    private LegacySupport support;
-
-    private Map<String, Configuration> configMap = new ConcurrentHashMap<>();
+    private final Map<MavenSession, String> sessionMap = new WeakHashMap<>();
 
     private final ThreadLocal<TcpClientConnection> connections =
             ThreadLocal.withInitial(() -> new TcpClientConnection());
@@ -62,47 +58,23 @@ public class TcpBuildConnection implements BuildConnection {
     }
 
     @Override
-    public Message send(Message message) {
+    public Message send(Message message, MavenSession mavenSession) {
         if (isEnabled()) {
-            String sessionId;
-            boolean sessionStart;
-            if (message instanceof SessionMessage) {
-                sessionId = message.getSessionId();
-                sessionStart = ((SessionMessage) message).isSessionStart();
-            } else {
-                sessionId = getThreadSessionId();
-                sessionStart = false;
-            }
+            String sessionId = getId(mavenSession);
             byte[] messageBytes = message.serialize(sessionId);
             byte[] replyBytes = connections.get().send(messageBytes);
             if (replyBytes.length > 0) {
-                Message reply = Message.decode(replyBytes);
-                if (reply != null && sessionStart) {
-                    configMap.put(sessionId, Configuration.of(reply));
-                }
-                return reply;
+                return Message.decode(replyBytes);
             }
         }
         return null;
     }
 
-    private String getThreadSessionId() {
-        // We must use LegacySupport here to get the currents threads session (what
-        // might be cloned)
-        return SessionMessage.getId(support.getSession());
-    }
-
-    @Override
-    public Configuration getConfiguration() {
-        String id = getThreadSessionId();
-        if (id == null) {
-            throw new IllegalStateException("No session attached to current thread!");
+    private synchronized String getId(MavenSession session) {
+        if (session == null) {
+            return Thread.currentThread().getName();
         }
-        Configuration configuration = configMap.get(id);
-        if (configuration == null) {
-            throw new IllegalStateException("No configuration active for session " + id + "!");
-        }
-        return configuration;
+        return sessionMap.computeIfAbsent(session, x -> UUID.randomUUID().toString());
     }
 
     /**

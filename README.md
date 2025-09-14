@@ -32,6 +32,11 @@ The project was relocated from <https://github.com/sonatype/sisu-build-api>. Als
 
 ## Provided APIs
 
+### Progress
+
+The API allows a mojo to report progress in a way that is suitable to be shown as a progressbar as well as check if the user wants the mojo to gracefully abort its current operation.
+This can be useful for example when processing some files in a loop so the user can directly see the amount of progress and possibly ask to abort if it takes to long.
+
 ### IDE connection to maven process
 
 This API is usually not used by mojos but for IDE integration, if enabled as a maven-core extension plexus-build-api supply a way to communicate with the running maven build and get events.

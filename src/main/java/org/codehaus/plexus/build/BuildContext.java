@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.codehaus.plexus.util.Scanner;
 
-// TODO should it be BuildWorkspace or something like that?
 /**
  * <p>BuildContext interface.</p>
  */
@@ -29,8 +28,6 @@ public interface BuildContext {
 
     /** Constant <code>SEVERITY_ERROR=2</code> */
     int SEVERITY_ERROR = 2;
-
-    // TODO should we add File getBasedir()?
 
     /**
      * Returns <code>true</code> if file or folder identified by <code>relpath</code> has

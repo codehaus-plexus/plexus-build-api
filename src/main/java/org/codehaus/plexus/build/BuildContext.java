@@ -24,10 +24,18 @@ import org.codehaus.plexus.util.Scanner;
  * <p>BuildContext interface.</p>
  */
 public interface BuildContext {
-    /** Constant <code>SEVERITY_WARNING=1</code> */
+    /**
+     * Constant <code>SEVERITY_WARNING=1</code>
+     * @deprecated Use {@link Severity#WARNING} instead
+     */
+    @Deprecated
     int SEVERITY_WARNING = 1;
 
-    /** Constant <code>SEVERITY_ERROR=2</code> */
+    /**
+     * Constant <code>SEVERITY_ERROR=2</code>
+     * @deprecated Use {@link Severity#ERROR} instead
+     */
+    @Deprecated
     int SEVERITY_ERROR = 2;
 
     // TODO should we add File getBasedir()?
@@ -208,11 +216,27 @@ public interface BuildContext {
      *          an absolute path.
      * @param line The line number inside the file. Use 1 (not 0) for the first line. Use 0 for unknown/unspecified.
      * @param column The column number inside the file. Use 1 (not 0) for the first column. Use 0 for unknown/unspecified.
+     * @param severity The severity of the message.
+     * @param cause A Throwable object associated with the message. Can be null.
+     * @since 1.2.1
+     * @param message a {@link java.lang.String} object.
+     */
+    void addMessage(File file, int line, int column, String message, Severity severity, Throwable cause);
+
+    /**
+     * Adds a message to the build context. The message is associated with a file and a location inside that file.
+     *
+     * @param file The file or folder with which the message is associated. Should not be null and it is recommended to be
+     *          an absolute path.
+     * @param line The line number inside the file. Use 1 (not 0) for the first line. Use 0 for unknown/unspecified.
+     * @param column The column number inside the file. Use 1 (not 0) for the first column. Use 0 for unknown/unspecified.
      * @param severity The severity of the message: SEVERITY_WARNING or SEVERITY_ERROR.
      * @param cause A Throwable object associated with the message. Can be null.
+     * @deprecated Use {@link #addMessage(File, int, int, String, Severity, Throwable)} instead
      * @since 0.0.7
      * @param message a {@link java.lang.String} object.
      */
+    @Deprecated
     void addMessage(File file, int line, int column, String message, int severity, Throwable cause);
 
     /**

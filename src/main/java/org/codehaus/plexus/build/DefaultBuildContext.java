@@ -163,12 +163,12 @@ public class DefaultBuildContext implements BuildContext {
 
     /** {@inheritDoc} */
     public void addError(File file, int line, int column, String message, Throwable cause) {
-        addMessage(file, line, column, message, SEVERITY_ERROR, cause);
+        addMessage(file, line, column, message, Severity.ERROR, cause);
     }
 
     /** {@inheritDoc} */
     public void addWarning(File file, int line, int column, String message, Throwable cause) {
-        addMessage(file, line, column, message, SEVERITY_WARNING, cause);
+        addMessage(file, line, column, message, Severity.WARNING, cause);
     }
 
     private String getMessage(File file, int line, int column, String message) {
@@ -176,13 +176,14 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
-    public void addMessage(File file, int line, int column, String message, int severity, Throwable cause) {
+    @Override
+    public void addMessage(File file, int line, int column, String message, Severity severity, Throwable cause) {
         if (isDefaultImplementation()) {
             switch (severity) {
-                case BuildContext.SEVERITY_ERROR:
+                case ERROR:
                     logger.error(getMessage(file, line, column, message), cause);
                     return;
-                case BuildContext.SEVERITY_WARNING:
+                case WARNING:
                     logger.warn(getMessage(file, line, column, message), cause);
                     return;
                 default:
@@ -190,7 +191,14 @@ public class DefaultBuildContext implements BuildContext {
                     return;
             }
         }
-        legacy.addMessage(file, line, column, message, severity, cause);
+        legacy.addMessage(file, line, column, message, severity.getValue(), cause);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @Deprecated
+    public void addMessage(File file, int line, int column, String message, int severity, Throwable cause) {
+        addMessage(file, line, column, message, Severity.fromValue(severity), cause);
     }
 
     /** {@inheritDoc} */

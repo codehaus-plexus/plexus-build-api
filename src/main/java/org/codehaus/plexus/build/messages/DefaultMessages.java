@@ -128,14 +128,18 @@ public class DefaultMessages implements Messages {
             sb.append(message.getPath().toAbsolutePath());
         }
 
-        if (message.getLine() > 0 || message.getColumn() > 0) {
+        if (message.getLine() > 0 && message.getColumn() > 0) {
             sb.append(" [");
-            if (message.getLine() > 0) {
-                sb.append(message.getLine());
-            }
-            if (message.getColumn() > 0) {
-                sb.append(':').append(message.getColumn());
-            }
+            sb.append(message.getLine());
+            sb.append(':').append(message.getColumn());
+            sb.append("]");
+        } else if (message.getLine() > 0) {
+            sb.append(" [");
+            sb.append(message.getLine());
+            sb.append("]");
+        } else if (message.getColumn() > 0) {
+            sb.append(" [:");
+            sb.append(message.getColumn());
             sb.append("]");
         }
 
@@ -163,7 +167,9 @@ public class DefaultMessages implements Messages {
                 return BuildContext.SEVERITY_WARNING;
             case INFO:
             default:
-                // There's no INFO severity in BuildContext, use WARNING as fallback
+                // There's no INFO severity in BuildContext (only WARNING and ERROR),
+                // so we map INFO messages to WARNING to ensure they are still visible in the IDE.
+                // Custom implementations may provide different mappings.
                 return BuildContext.SEVERITY_WARNING;
         }
     }

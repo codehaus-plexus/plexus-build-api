@@ -211,6 +211,7 @@ public interface BuildContext {
      * @param message a {@link java.lang.String} object.
      * @deprecated Use {@link org.codehaus.plexus.build.messages.Messages} API instead
      */
+    @Deprecated
     void addMessage(File file, int line, int column, String message, int severity, Throwable cause);
 
     /**
@@ -221,6 +222,7 @@ public interface BuildContext {
      * @param file a {@link java.io.File} object.
      * @deprecated Use {@link org.codehaus.plexus.build.messages.Messages#clear(java.nio.file.Path)} instead
      */
+    @Deprecated
     void removeMessages(File file);
 
     /**

@@ -84,4 +84,43 @@ public class Message {
     public Throwable getCause() {
         return cause;
     }
+
+    /**
+     * Returns a string representation of this message.
+     * The format is: path [line:column]: message
+     *
+     * @return the formatted message string
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        if (path != null) {
+            sb.append(path.toAbsolutePath());
+        }
+
+        if (line > 0 && column > 0) {
+            sb.append(" [");
+            sb.append(line);
+            sb.append(':').append(column);
+            sb.append("]");
+        } else if (line > 0) {
+            sb.append(" [");
+            sb.append(line);
+            sb.append("]");
+        } else if (column > 0) {
+            sb.append(" [:");
+            sb.append(column);
+            sb.append("]");
+        }
+
+        if (message != null) {
+            if (sb.length() > 0) {
+                sb.append(": ");
+            }
+            sb.append(message);
+        }
+
+        return sb.toString();
+    }
 }

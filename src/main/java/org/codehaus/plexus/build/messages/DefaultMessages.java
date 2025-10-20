@@ -86,7 +86,7 @@ public class DefaultMessages implements Messages {
      */
     private void handleMessage(Message message) {
         // Log the message
-        String logMessage = formatLogMessage(message);
+        String logMessage = message.toString();
 
         switch (message.getType()) {
             case ERROR:
@@ -111,44 +111,6 @@ public class DefaultMessages implements Messages {
                     severity,
                     message.getCause());
         }
-    }
-
-    /**
-     * Formats a message for logging.
-     *
-     * @param message the message to format
-     * @return the formatted log message
-     */
-    private String formatLogMessage(Message message) {
-        StringBuilder sb = new StringBuilder();
-
-        if (message.getPath() != null) {
-            sb.append(message.getPath().toAbsolutePath());
-        }
-
-        if (message.getLine() > 0 && message.getColumn() > 0) {
-            sb.append(" [");
-            sb.append(message.getLine());
-            sb.append(':').append(message.getColumn());
-            sb.append("]");
-        } else if (message.getLine() > 0) {
-            sb.append(" [");
-            sb.append(message.getLine());
-            sb.append("]");
-        } else if (message.getColumn() > 0) {
-            sb.append(" [:");
-            sb.append(message.getColumn());
-            sb.append("]");
-        }
-
-        if (message.getMessage() != null) {
-            if (sb.length() > 0) {
-                sb.append(": ");
-            }
-            sb.append(message.getMessage());
-        }
-
-        return sb.toString();
     }
 
     /**

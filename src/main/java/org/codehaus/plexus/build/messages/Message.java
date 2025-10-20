@@ -1,6 +1,4 @@
 /*
-Copyright (c) 2008 Sonatype, Inc. All rights reserved.
-
 This program is licensed to you under the Apache License Version 2.0,
 and you may not use this file except in compliance with the Apache License Version 2.0.
 You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
@@ -36,7 +34,7 @@ public class Message {
      * @param message the message text
      * @param cause the exception cause, can be null
      */
-    public Message(MessageType type, Path path, int line, int column, String message, Throwable cause) {
+    Message(MessageType type, Path path, int line, int column, String message, Throwable cause) {
         this.type = type;
         this.path = path;
         this.line = line;

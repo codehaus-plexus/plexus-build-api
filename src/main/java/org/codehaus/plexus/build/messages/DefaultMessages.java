@@ -1,6 +1,4 @@
 /*
-Copyright (c) 2008 Sonatype, Inc. All rights reserved.
-
 This program is licensed to you under the Apache License Version 2.0,
 and you may not use this file except in compliance with the Apache License Version 2.0.
 You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
@@ -62,17 +60,17 @@ public class DefaultMessages implements Messages {
     }
 
     @Override
-    public MessageBuilder buildError(Path path) {
+    public MessageBuilder error(Path path) {
         return build(MessageType.ERROR, path);
     }
 
     @Override
-    public MessageBuilder buildWarning(Path path) {
+    public MessageBuilder warning(Path path) {
         return build(MessageType.WARNING, path);
     }
 
     @Override
-    public MessageBuilder buildInfo(Path path) {
+    public MessageBuilder info(Path path) {
         return build(MessageType.INFO, path);
     }
 
@@ -167,10 +165,8 @@ public class DefaultMessages implements Messages {
                 return BuildContext.SEVERITY_WARNING;
             case INFO:
             default:
-                // There's no INFO severity in BuildContext (only WARNING and ERROR),
-                // so we map INFO messages to WARNING to ensure they are still visible in the IDE.
-                // Custom implementations may provide different mappings.
-                return BuildContext.SEVERITY_WARNING;
+                // BuildContext supports 0 as an info severity level (undocumented)
+                return 0;
         }
     }
 }

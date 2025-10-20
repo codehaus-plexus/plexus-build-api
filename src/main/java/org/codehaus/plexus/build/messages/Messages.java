@@ -1,6 +1,4 @@
 /*
-Copyright (c) 2008 Sonatype, Inc. All rights reserved.
-
 This program is licensed to you under the Apache License Version 2.0,
 and you may not use this file except in compliance with the Apache License Version 2.0.
 You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
@@ -26,11 +24,10 @@ import java.nio.file.Path;
  * Example usage:
  * </p>
  * <pre>
- * messages.buildError(Paths.get("/path/to/file.java"))
+ * messages.error(Paths.get("/path/to/file.java"))
  *     .line(42)
  *     .column(10)
- *     .message("Syntax error")
- *     .create();
+ *     .create("Syntax error");
  * </pre>
  */
 public interface Messages {
@@ -54,7 +51,7 @@ public interface Messages {
      * @param path the file path for which the error message should be created
      * @return a MessageBuilder for constructing the error message
      */
-    MessageBuilder buildError(Path path);
+    MessageBuilder error(Path path);
 
     /**
      * Creates a builder for a warning message.
@@ -62,7 +59,7 @@ public interface Messages {
      * @param path the file path for which the warning message should be created
      * @return a MessageBuilder for constructing the warning message
      */
-    MessageBuilder buildWarning(Path path);
+    MessageBuilder warning(Path path);
 
     /**
      * Creates a builder for an informational message.
@@ -70,7 +67,7 @@ public interface Messages {
      * @param path the file path for which the info message should be created
      * @return a MessageBuilder for constructing the info message
      */
-    MessageBuilder buildInfo(Path path);
+    MessageBuilder info(Path path);
 
     /**
      * Creates a builder for a message of a specific type.

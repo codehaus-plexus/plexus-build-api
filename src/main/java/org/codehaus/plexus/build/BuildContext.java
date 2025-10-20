@@ -209,6 +209,7 @@ public interface BuildContext {
      * @param cause A Throwable object associated with the message. Can be null.
      * @since 0.0.7
      * @param message a {@link java.lang.String} object.
+     * @deprecated Use {@link org.codehaus.plexus.build.messages.Messages} API instead
      */
     void addMessage(File file, int line, int column, String message, int severity, Throwable cause);
 
@@ -218,6 +219,7 @@ public interface BuildContext {
      *
      * @since 0.0.7
      * @param file a {@link java.io.File} object.
+     * @deprecated Use {@link org.codehaus.plexus.build.messages.Messages#clear(java.nio.file.Path)} instead
      */
     void removeMessages(File file);
 

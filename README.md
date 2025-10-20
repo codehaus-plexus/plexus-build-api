@@ -52,18 +52,16 @@ private Messages messages;
 
 public void execute() {
     // Create an error message
-    messages.buildError(Paths.get("/path/to/file.java"))
+    messages.error(Paths.get("/path/to/file.java"))
         .line(42)
         .column(10)
-        .message("Syntax error")
         .cause(exception)
-        .create();
+        .create("Syntax error");
     
     // Create a warning message
-    messages.buildWarning(Paths.get("/path/to/file.java"))
+    messages.warning(Paths.get("/path/to/file.java"))
         .line(15)
-        .message("Deprecated method used")
-        .create();
+        .create("Deprecated method used");
     
     // Clear messages for a specific file
     messages.clear(Paths.get("/path/to/file.java"));

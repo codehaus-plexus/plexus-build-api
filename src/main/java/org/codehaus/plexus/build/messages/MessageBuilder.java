@@ -1,6 +1,4 @@
 /*
-Copyright (c) 2008 Sonatype, Inc. All rights reserved.
-
 This program is licensed to you under the Apache License Version 2.0,
 and you may not use this file except in compliance with the Apache License Version 2.0.
 You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
@@ -30,7 +28,6 @@ public class MessageBuilder {
 
     private int line = 0;
     private int column = 0;
-    private String message;
     private Throwable cause;
 
     /**
@@ -73,17 +70,6 @@ public class MessageBuilder {
     }
 
     /**
-     * Sets the message text.
-     *
-     * @param message the message text
-     * @return this builder for method chaining
-     */
-    public MessageBuilder message(String message) {
-        this.message = message;
-        return this;
-    }
-
-    /**
      * Sets the exception cause for the message.
      *
      * @param cause the exception that caused this message
@@ -97,8 +83,13 @@ public class MessageBuilder {
     /**
      * Creates the message object with all collected parameters and informs the consumer.
      * This method finalizes the builder and creates the message.
+     *
+     * @param message the message text (must not be null or blank)
      */
-    public void create() {
+    public void create(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            throw new IllegalArgumentException("Message text must not be null or blank");
+        }
         Message msg = new Message(type, path, line, column, message, cause);
         consumer.accept(msg);
     }

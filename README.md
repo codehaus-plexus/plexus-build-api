@@ -32,6 +32,45 @@ The project was relocated from <https://github.com/sonatype/sisu-build-api>. Als
 
 ## Provided APIs
 
+### Messages API
+
+The Messages API provides a modern, flexible way to create and manage build messages/markers that inform users in an IDE about issues in their files. It uses a builder pattern for constructing messages in a more convenient and extensible way compared to the legacy BuildContext message methods.
+
+**Key Features:**
+- Builder pattern for flexible message construction
+- Clear separation of concerns from resource operations
+- Support for error, warning, and info messages
+- File path-based message management
+- Optional line and column information
+- Optional exception cause association
+
+**Example Usage:**
+
+```java
+@Inject
+private Messages messages;
+
+public void execute() {
+    // Create an error message
+    messages.error(Paths.get("/path/to/file.java"))
+        .line(42)
+        .column(10)
+        .cause(exception)
+        .create("Syntax error");
+    
+    // Create a warning message
+    messages.warning(Paths.get("/path/to/file.java"))
+        .line(15)
+        .create("Deprecated method used");
+    
+    // Clear messages for a specific file
+    messages.clear(Paths.get("/path/to/file.java"));
+    
+    // Clear all messages
+    messages.clearAll();
+}
+```
+
 ### Progress
 
 The API allows a mojo to report progress in a way that is suitable to be shown as a progressbar as well as check if the user wants the mojo to gracefully abort its current operation.

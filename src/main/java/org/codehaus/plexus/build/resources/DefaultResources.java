@@ -16,12 +16,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.apache.maven.plugin.LegacySupport;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.build.BuildContext;
 
 /**
@@ -37,15 +40,18 @@ import org.codehaus.plexus.build.BuildContext;
 public class DefaultResources implements Resources {
 
     private final BuildContext buildContext;
+    private final LegacySupport legacySupport;
 
     /**
      * Creates a new DefaultResources instance.
      *
      * @param buildContext the BuildContext to which operations will be delegated
+     * @param legacySupport the LegacySupport to get the current Maven project
      */
     @Inject
-    public DefaultResources(BuildContext buildContext) {
+    public DefaultResources(BuildContext buildContext, LegacySupport legacySupport) {
         this.buildContext = buildContext;
+        this.legacySupport = legacySupport;
     }
 
     @Override
@@ -97,10 +103,16 @@ public class DefaultResources implements Resources {
         if (relpath == null) {
             throw new IllegalArgumentException("relpath cannot be null");
         }
-        // Note: The BuildContext API doesn't expose basedir directly.
-        // This default implementation resolves paths relative to the current working directory.
-        // Custom implementations (e.g., IDE integrations) should override this method
-        // to resolve against the actual build context basedir.
+        // Get the basedir from the current Maven project via LegacySupport
+        MavenProject project =
+                legacySupport.getSession() != null ? legacySupport.getSession().getCurrentProject() : null;
+        if (project != null) {
+            File basedir = project.getBasedir();
+            if (basedir != null) {
+                return basedir.toPath().resolve(relpath);
+            }
+        }
+        // Fallback to current working directory if project is not available
         return java.nio.file.Paths.get(relpath);
     }
 

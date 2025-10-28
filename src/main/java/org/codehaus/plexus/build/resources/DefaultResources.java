@@ -75,9 +75,10 @@ public class DefaultResources implements Resources {
     public OutputStream newOutputStream(Path file, boolean derived) throws IOException {
         OutputStream outputStream = newOutputStream(file);
         if (derived) {
-            // Mark the file as derived after creating the output stream
-            // The marking happens here so that implementations can wrap the stream
-            // if needed to defer the marking until after successful write
+            // Mark the file as derived after creating the output stream.
+            // In the default implementation, markDerived is a no-op, so the timing doesn't matter.
+            // Custom implementations that track derived files should consider wrapping the stream
+            // to defer marking until successful close() to avoid marking files on failed writes.
             markDerived(file);
         }
         return outputStream;
@@ -96,10 +97,10 @@ public class DefaultResources implements Resources {
         if (relpath == null) {
             throw new IllegalArgumentException("relpath cannot be null");
         }
-        // Get the basedir from the build context by checking a known file
-        // The BuildContext API doesn't expose basedir directly, so we need to work around this
-        // For the default implementation, we'll resolve against the current working directory
-        // Custom implementations should override this to use the actual basedir
+        // Note: The BuildContext API doesn't expose basedir directly.
+        // This default implementation resolves paths relative to the current working directory.
+        // Custom implementations (e.g., IDE integrations) should override this method
+        // to resolve against the actual build context basedir.
         return java.nio.file.Paths.get(relpath);
     }
 

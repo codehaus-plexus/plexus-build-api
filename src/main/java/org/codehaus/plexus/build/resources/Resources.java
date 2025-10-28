@@ -75,10 +75,10 @@ public interface Resources {
      * explicitly refreshed using {@link #refresh(Path)}.
      * </p>
      * <p>
-     * As an optimization, OutputStreams created by incremental build contexts will
-     * attempt to avoid writing to the file if the file content has not changed.
-     * This ensures that file timestamps are only updated when actual changes occur,
-     * which is important for incremental build performance.
+     * As an optimization, some implementations may attempt to avoid writing to the file
+     * if the file content has not changed. This ensures that file timestamps are only
+     * updated when actual changes occur, which is important for incremental build performance.
+     * This optimization is implementation-dependent and may not apply to all implementations.
      * </p>
      *
      * @param file the file to write to
@@ -95,8 +95,9 @@ public interface Resources {
      * explicitly refreshed using {@link #refresh(Path)}.
      * </p>
      * <p>
-     * As an optimization, OutputStreams created by incremental build contexts will
-     * attempt to avoid writing to the file if the file content has not changed.
+     * As an optimization, some implementations may attempt to avoid writing to the file
+     * if the file content has not changed. This optimization is implementation-dependent
+     * and may not apply to all implementations.
      * </p>
      * <p>
      * When <code>derived</code> is <code>true</code>, the file is marked as generated/derived,

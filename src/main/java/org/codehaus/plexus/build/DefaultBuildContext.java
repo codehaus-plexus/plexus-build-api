@@ -153,12 +153,18 @@ public class DefaultBuildContext implements BuildContext {
 
     /** {@inheritDoc} */
     public Object getValue(String key) {
-        return contextMap.get(key);
+        if (isDefaultImplementation()) {
+            return contextMap.get(key);
+        }
+        return legacy.getValue(key);
     }
 
     /** {@inheritDoc} */
     public void setValue(String key, Object value) {
-        contextMap.put(key, value);
+        if (isDefaultImplementation()) {
+            contextMap.put(key, value);
+        }
+        legacy.setValue(key, value);
     }
 
     /** {@inheritDoc} */

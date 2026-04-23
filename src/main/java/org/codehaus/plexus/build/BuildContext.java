@@ -35,7 +35,9 @@ public interface BuildContext {
      *
      * @param relpath is path relative to build context basedir
      * @return a boolean.
+     * @deprecated Use {@link org.codehaus.plexus.build.resources.Resources#hasDelta(java.nio.file.Path)} instead
      */
+    @Deprecated
     boolean hasDelta(String relpath);
 
     /**
@@ -45,7 +47,9 @@ public interface BuildContext {
      * @since 0.0.5
      * @param file a {@link java.io.File} object.
      * @return a boolean.
+     * @deprecated Use {@link org.codehaus.plexus.build.resources.Resources#hasDelta(java.nio.file.Path)} instead
      */
+    @Deprecated
     boolean hasDelta(File file);
 
     /**
@@ -54,7 +58,9 @@ public interface BuildContext {
      *
      * @param relpaths paths relative to build context basedir
      * @return a boolean.
+     * @deprecated Use {@link org.codehaus.plexus.build.resources.Resources#hasDelta(java.nio.file.Path)} instead
      */
+    @Deprecated
     boolean hasDelta(List<String> relpaths);
 
     /**
@@ -62,7 +68,9 @@ public interface BuildContext {
      *
      * @see #newFileOutputStream(File)
      * @param file a {@link java.io.File} object.
+     * @deprecated Use {@link org.codehaus.plexus.build.resources.Resources#refresh(java.nio.file.Path)} instead
      */
+    @Deprecated
     void refresh(File file);
 
     /**
@@ -78,7 +86,9 @@ public interface BuildContext {
      * @param file a {@link java.io.File} object.
      * @return a {@link java.io.OutputStream} object.
      * @throws java.io.IOException if any.
+     * @deprecated Use {@link org.codehaus.plexus.build.resources.Resources#newOutputStream(java.nio.file.Path)} instead
      */
+    @Deprecated
     OutputStream newFileOutputStream(File file) throws IOException;
 
     /**
@@ -236,6 +246,8 @@ public interface BuildContext {
      * @param target a {@link java.io.File} object.
      * @param source a {@link java.io.File} object.
      * @return a boolean.
+     * @deprecated Use {@link org.codehaus.plexus.build.resources.Resources#isUptodate(java.nio.file.Path, java.nio.file.Path)} instead
      */
+    @Deprecated
     boolean isUptodate(File target, File source);
 }

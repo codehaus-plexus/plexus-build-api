@@ -23,6 +23,11 @@ See the Apache License Version 2.0 for the specific language governing permissio
   <artifactId>plexus-build-api</artifactId>
   <version>1.3.1-SNAPSHOT</version>
 
+  <name>Plexus Build API</name>
+  <description>An API that lets Maven plugins report file changes, messages and progress to whatever is
+    running the build, so an IDE can refresh what a plugin touched and show its diagnostics in place. Outside
+    an IDE the default implementation writes to the filesystem and the Maven log.</description>
+
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</connection>
     <developerConnection>${project.scm.connection}</developerConnection>

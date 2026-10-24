@@ -32,6 +32,59 @@ The project was relocated from <https://github.com/sonatype/sisu-build-api>. Als
 
 ## Provided APIs
 
+### Resources API
+
+The Resources API provides a modern, Path-based interface for managing build resources. It separates resource management concerns from logging/messaging functionality and provides better control over file operations during the build process.
+
+**Key Features:**
+- Modern `java.nio.file.Path` instead of `java.io.File`
+- Change detection with `hasDelta()` (best effort hint)
+- Reliable input/output freshness checking with `isUptodate()`
+- Optimized output streams that only update files when content changes
+- Support for marking generated/derived files for IDE integration
+- Convenient copy operation that respects up-to-date checks
+- Relative path conversion via `getPath()`
+
+**Example Usage:**
+
+```java
+@Inject
+private Resources resources;
+
+public void execute() {
+    // Convert relative paths to absolute paths
+    Path source = resources.getPath("src/main/java/Example.java");
+    Path target = resources.getPath("target/classes/Example.class");
+    
+    // Smart copy - only copies when target is stale
+    resources.copy(source, target);
+    
+    // Check if file has changed (best effort hint)
+    if (resources.hasDelta(source)) {
+        // Process the file
+    }
+    
+    // Reliable check for input/output scenarios
+    if (!resources.isUptodate(target, source)) {
+        // Regenerate target from source
+    }
+    
+    // Write to a file with change detection
+    Path generated = resources.getPath("target/generated/Proto.java");
+    try (OutputStream out = resources.newOutputStream(generated, true)) {
+        // Write content - file marked as derived for IDE warnings
+        out.write(content);
+    }
+    
+    // Mark a file as generated/derived
+    resources.markDerived(generated);
+}
+```
+
+**When to use `hasDelta()` vs `isUptodate()`:**
+- Use `hasDelta()` as a hint for user-editable source files where you want to detect changes
+- Use `isUptodate()` when there's a clear input/output relationship, as it handles cases where target files may be deleted or modified outside the build process
+
 ### Messages API
 
 The Messages API provides a modern, flexible way to create and manage build messages/markers that inform users in an IDE about issues in their files. It uses a builder pattern for constructing messages in a more convenient and extensible way compared to the legacy BuildContext message methods.

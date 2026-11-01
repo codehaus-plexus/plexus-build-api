@@ -5,6 +5,16 @@ updates:
     schedule:
       interval: "daily"
     ignore:
+      # Stay on the Maven 3.9.x line
+      - dependency-name: "org.apache.maven:maven-core"
+        versions: [">= 3.10.0"]
+      - dependency-name: "org.apache.maven:maven-model"
+        versions: [">= 3.10.0"]
+      - dependency-name: "org.apache.maven:maven-model-builder"
+        versions: [">= 3.10.0"]
+      # Maven 3.9.x ships Sisu 1.0.0
+      - dependency-name: "org.eclipse.sisu:org.eclipse.sisu.*"
+        versions: [">= 1.1.0"]
       # Maven 3 so use SLF4J 1.7.x
       - dependency-name: "org.slf4j:*"
         versions: [">= 2.0.0"]

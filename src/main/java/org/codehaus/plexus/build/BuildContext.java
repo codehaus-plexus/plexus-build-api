@@ -167,10 +167,16 @@ public interface BuildContext {
      *
      * @see #setValue(String, Object)
      * @see #isIncremental()
+     * <p>
+     * The return type is inferred from the assignment target and is not checked here: a value of another type
+     * than the one the caller expects fails with a {@link ClassCastException} at the call site.
+     * </p>
+     *
+     * @param <T> the expected type of the value
      * @param key a {@link java.lang.String} object.
-     * @return a {@link java.lang.Object} object.
+     * @return the value, or {@code null} if there is none
      */
-    Object getValue(String key);
+    <T> T getValue(String key);
 
     /**
      * <p>addWarning.</p>

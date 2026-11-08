@@ -152,11 +152,12 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
-    public Object getValue(String key) {
+    @SuppressWarnings("unchecked")
+    public <T> T getValue(String key) {
         if (isDefaultImplementation()) {
-            return contextMap.get(key);
+            return (T) contextMap.get(key);
         }
-        return legacy.getValue(key);
+        return (T) legacy.getValue(key);
     }
 
     /** {@inheritDoc} */

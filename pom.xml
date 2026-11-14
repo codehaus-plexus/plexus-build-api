@@ -92,6 +92,18 @@ See the Apache License Version 2.0 for the specific language governing permissio
       <version>3.10.0</version>
       <scope>provided</scope>
     </dependency>
+    <!-- Maven 3 core supplies the XML classes that plexus-utils 4 moved out; ProjectsMessage needs them. -->
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-xml</artifactId>
+      <version>3.0.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 
@@ -106,13 +118,6 @@ See the Apache License Version 2.0 for the specific language governing permissio
       <plugin>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>sisu-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

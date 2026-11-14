@@ -2,7 +2,6 @@ package org.codehaus.plexus.build.progress;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.apache.maven.execution.scope.MojoExecutionScoped;
 import org.apache.maven.plugin.MojoExecution;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
  * interruption
  */
 @Named("default")
-@Singleton
 @MojoExecutionScoped
 public class DefaultProgress implements Progress {
 

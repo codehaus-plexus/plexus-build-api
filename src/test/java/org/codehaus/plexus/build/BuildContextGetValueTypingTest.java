@@ -2,8 +2,8 @@ package org.codehaus.plexus.build;
 
 /**
  * Compile-time check that {@link BuildContext#getValue(String)} infers its result type from the assignment target, and
- * that an implementation declaring the pre-generic {@code Object getValue(String)} still compiles. The module skips
- * test execution, so this fails the build by not compiling.
+ * that an implementation declaring the pre-generic {@code Object getValue(String)} still compiles. It has no test
+ * methods: it fails the build by not compiling.
  */
 final class BuildContextGetValueTypingTest {
 

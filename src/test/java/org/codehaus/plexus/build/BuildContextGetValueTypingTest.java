@@ -10,11 +10,13 @@ final class BuildContextGetValueTypingTest {
     private BuildContextGetValueTypingTest() {}
 
     static String inferredFromAssignment(BuildContext context) {
-        return context.getValue("key");
+        String value = context.getValue("key");
+        return value;
     }
 
     static Object plainObjectStillWorks(BuildContext context) {
-        return context.getValue("key");
+        Object value = context.getValue("key");
+        return value;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

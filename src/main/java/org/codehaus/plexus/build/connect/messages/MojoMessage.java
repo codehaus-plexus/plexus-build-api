@@ -113,7 +113,7 @@ public class MojoMessage extends Message {
     /**
      * create the event type
      */
-    public static enum EventType {
+    public enum EventType {
         /**
          * the mojo was started
          */
@@ -133,6 +133,6 @@ public class MojoMessage extends Message {
         /**
          * the type is unknown
          */
-        Unknown;
+        Unknown
     }
 }

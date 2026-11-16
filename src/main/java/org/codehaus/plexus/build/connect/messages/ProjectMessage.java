@@ -97,7 +97,7 @@ public class ProjectMessage extends Message {
     /**
      * Describe the type of the event
      */
-    public static enum EventType {
+    public enum EventType {
         /**
          * The project was started
          */
@@ -117,6 +117,6 @@ public class ProjectMessage extends Message {
         /**
          * the type of event is unknown
          */
-        Unknown;
+        Unknown
     }
 }

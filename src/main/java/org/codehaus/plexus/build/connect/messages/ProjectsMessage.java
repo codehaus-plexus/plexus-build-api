@@ -52,7 +52,7 @@ public class ProjectsMessage extends Message {
         return keys().map(key -> {
                     String[] gav = key.split("\t");
                     if (gav.length == 5 && "p".equals(gav[0])) {
-                        ProjectInfo pi = new ProjectInfo() {
+                        return new ProjectInfo() {
 
                             @Override
                             public String getGroupId() {
@@ -79,7 +79,6 @@ public class ProjectsMessage extends Message {
                                 return new File(gav[4]).toPath();
                             }
                         };
-                        return pi;
                     }
                     return null;
                 })
@@ -107,8 +106,7 @@ public class ProjectsMessage extends Message {
             MODEL_WRITER.write(writer, null, model);
         } catch (IOException e) {
         }
-        String string = writer.toString();
-        return string;
+        return writer.toString();
     }
 
     /**

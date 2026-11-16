@@ -49,8 +49,7 @@ public class TcpBuildConnection implements BuildConnection {
 
     private final Map<MavenSession, String> sessionMap = new WeakHashMap<>();
 
-    private final ThreadLocal<TcpClientConnection> connections =
-            ThreadLocal.withInitial(() -> new TcpClientConnection());
+    private final ThreadLocal<TcpClientConnection> connections = ThreadLocal.withInitial(TcpClientConnection::new);
 
     @Override
     public boolean isEnabled() {

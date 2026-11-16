@@ -26,8 +26,8 @@ public class MessageBuilder {
     private final Path path;
     private final Consumer<Message> consumer;
 
-    private int line = 0;
-    private int column = 0;
+    private int line;
+    private int column;
     private Throwable cause;
 
     /**

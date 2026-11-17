@@ -31,7 +31,7 @@ class TcpBuildConnectionTest {
     private static final String PORT_PROPERTY = "plexus.build.ipc.port";
 
     @Test
-    void disabledWithoutPortProperty() throws IOException {
+    void disabledWithoutPortProperty() throws Exception {
         assumeTrue(System.getProperty(PORT_PROPERTY) == null, "the IPC port is set for this JVM");
         TcpBuildConnection connection = new TcpBuildConnection();
 

@@ -80,6 +80,7 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean hasDelta(String relpath) {
         return legacy.hasDelta(relpath);
     }
@@ -90,6 +91,7 @@ public class DefaultBuildContext implements BuildContext {
      * @param file a {@link java.io.File} object.
      * @return a boolean.
      */
+    @Override
     public boolean hasDelta(File file) {
         return legacy.hasDelta(file);
     }
@@ -100,11 +102,13 @@ public class DefaultBuildContext implements BuildContext {
      * @param relpaths a {@link java.util.List} object.
      * @return a boolean.
      */
+    @Override
     public boolean hasDelta(List<String> relpaths) {
         return legacy.hasDelta(relpaths);
     }
 
     /** {@inheritDoc} */
+    @Override
     public OutputStream newFileOutputStream(File file) throws IOException {
         if (isDefaultImplementation()) {
             return new CachingOutputStream(file.toPath());
@@ -122,22 +126,26 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Scanner newScanner(File basedir) {
         return legacy.newScanner(basedir);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void refresh(File file) {
         legacy.refresh(file);
         connection.send(new RefreshMessage(file.toPath()), legacySupport.getSession());
     }
 
     /** {@inheritDoc} */
+    @Override
     public Scanner newDeleteScanner(File basedir) {
         return legacy.newDeleteScanner(basedir);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Scanner newScanner(File basedir, boolean ignoreDelta) {
         return legacy.newScanner(basedir, ignoreDelta);
     }
@@ -147,11 +155,13 @@ public class DefaultBuildContext implements BuildContext {
      *
      * @return a boolean.
      */
+    @Override
     public boolean isIncremental() {
         return legacy.isIncremental();
     }
 
     /** {@inheritDoc} */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T getValue(String key) {
         if (isDefaultImplementation()) {
@@ -161,6 +171,7 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setValue(String key, Object value) {
         if (isDefaultImplementation()) {
             contextMap.put(key, value);
@@ -169,11 +180,13 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addError(File file, int line, int column, String message, Throwable cause) {
         addMessage(file, line, column, message, SEVERITY_ERROR, cause);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addWarning(File file, int line, int column, String message, Throwable cause) {
         addMessage(file, line, column, message, SEVERITY_WARNING, cause);
     }
@@ -183,6 +196,7 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addMessage(File file, int line, int column, String message, int severity, Throwable cause) {
         if (isDefaultImplementation()) {
             switch (severity) {
@@ -201,6 +215,7 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removeMessages(File file) {
         if (isDefaultImplementation()) {
             return;
@@ -209,6 +224,7 @@ public class DefaultBuildContext implements BuildContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isUptodate(File target, File source) {
         return legacy.isUptodate(target, source);
     }

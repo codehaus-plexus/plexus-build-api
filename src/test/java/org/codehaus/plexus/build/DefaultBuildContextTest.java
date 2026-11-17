@@ -1,6 +1,7 @@
 package org.codehaus.plexus.build;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -43,7 +44,7 @@ class DefaultBuildContextTest {
     }
 
     @Test
-    void unchangedContentDoesNotTouchTheFile() throws Exception {
+    void unchangedContentDoesNotTouchTheFile() throws IOException {
         DefaultBuildContext context = withDefaultLegacy();
         File file = dir.resolve("out.txt").toFile();
         Files.write(file.toPath(), "same".getBytes(StandardCharsets.UTF_8));
@@ -58,7 +59,7 @@ class DefaultBuildContextTest {
     }
 
     @Test
-    void changedContentIsWritten() throws Exception {
+    void changedContentIsWritten() throws IOException {
         DefaultBuildContext context = withDefaultLegacy();
         File file = dir.resolve("out.txt").toFile();
         Files.write(file.toPath(), "old".getBytes(StandardCharsets.UTF_8));
@@ -86,7 +87,7 @@ class DefaultBuildContextTest {
     }
 
     @Test
-    void customLegacyContextReceivesEveryCall() throws Exception {
+    void customLegacyContextReceivesEveryCall() throws IOException {
         RecordingProxy<org.sonatype.plexus.build.incremental.BuildContext> legacy =
                 RecordingProxy.of(org.sonatype.plexus.build.incremental.BuildContext.class);
         legacy.answer("getValue", "from-legacy").answer("hasDelta", true).answer("isIncremental", true);

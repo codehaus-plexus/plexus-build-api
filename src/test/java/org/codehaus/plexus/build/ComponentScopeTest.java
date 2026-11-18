@@ -47,11 +47,7 @@ class ComponentScopeTest {
 
         for (String name : components) {
             Class<?> type = Class.forName(name);
-            List<String> scopes = Arrays.stream(type.getAnnotations())
-                    .map(Annotation::annotationType)
-                    .filter(ComponentScopeTest::isScope)
-                    .map(Class::getName)
-                    .collect(Collectors.toList());
+            List<String> scopes = scopeNames(type);
             assertTrue(scopes.size() <= 1, () -> name + " has more than one scope annotation: " + scopes);
         }
     }
@@ -59,13 +55,17 @@ class ComponentScopeTest {
     @Test
     void defaultProgressIsScopedToTheMojoExecution() throws Exception {
         Class<?> type = Class.forName("org.codehaus.plexus.build.progress.DefaultProgress");
-        List<String> scopes = Arrays.stream(type.getAnnotations())
+        List<String> scopes = scopeNames(type);
+
+        assertEquals(Arrays.asList("org.apache.maven.execution.scope.MojoExecutionScoped"), scopes);
+    }
+
+    private static List<String> scopeNames(Class<?> type) {
+        return Arrays.stream(type.getAnnotations())
                 .map(Annotation::annotationType)
                 .filter(ComponentScopeTest::isScope)
                 .map(Class::getName)
                 .collect(Collectors.toList());
-
-        assertEquals(Arrays.asList("org.apache.maven.execution.scope.MojoExecutionScoped"), scopes);
     }
 
     private static boolean isScope(Class<? extends Annotation> annotationType) {

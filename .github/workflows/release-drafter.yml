@@ -4,10 +4,13 @@ on:
     branches:
       - master
   workflow_dispatch:
+
+permissions: {}
+
 jobs:
   update_release_draft:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: release-drafter/release-drafter@v7.10.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # the called workflow drafts the release and reads merged pull requests
+    permissions:
+      contents: write
+      pull-requests: read
+    uses: codehaus-plexus/.github/.github/workflows/release-drafter.yml@master

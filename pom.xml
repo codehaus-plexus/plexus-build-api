@@ -36,7 +36,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
   </scm>
 
   <properties>
-    <mavenVersion>3.9.16</mavenVersion>
+    <mavenVersion>3.10.1</mavenVersion>
   </properties>
 
   <dependencies>

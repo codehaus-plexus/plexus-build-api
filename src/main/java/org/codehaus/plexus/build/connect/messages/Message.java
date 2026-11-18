@@ -142,15 +142,11 @@ public class Message {
             writeString(sessionId, out);
             out.writeLong(threadId);
             writeString(getClass().getSimpleName(), out);
-            if (properties.isEmpty()) {
-                out.writeInt(0);
-            } else {
-                Set<Entry<String, String>> set = properties.entrySet();
-                out.writeInt(set.size());
-                for (Entry<String, String> entry : set) {
-                    writeString(entry.getKey(), out);
-                    writeString(entry.getValue(), out);
-                }
+            Set<Entry<String, String>> set = properties.entrySet();
+            out.writeInt(set.size());
+            for (Entry<String, String> entry : set) {
+                writeString(entry.getKey(), out);
+                writeString(entry.getValue(), out);
             }
         } catch (IOException e) {
             // should never happen, but if it happens something is wrong!
@@ -222,9 +218,6 @@ public class Message {
         int length = in.readInt();
         if (length < 0) {
             return null;
-        }
-        if (length == 0) {
-            return "";
         }
         byte[] bs = new byte[length];
         in.readFully(bs);

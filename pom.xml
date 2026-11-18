@@ -28,6 +28,10 @@ See the Apache License Version 2.0 for the specific language governing permissio
     running the build, so an IDE can refresh what a plugin touched and show its diagnostics in place. Outside
     an IDE the default implementation writes to the filesystem and the Maven log.</description>
 
+  <properties>
+    <mavenVersion>3.9.16</mavenVersion>
+  </properties>
+
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/plexus-build-api.git</connection>
     <developerConnection>${project.scm.connection}</developerConnection>
@@ -77,19 +81,19 @@ See the Apache License Version 2.0 for the specific language governing permissio
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
-      <version>3.10.0</version>
+      <version>${mavenVersion}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
-      <version>3.10.0</version>
+      <version>${mavenVersion}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model-builder</artifactId>
-      <version>3.10.0</version>
+      <version>${mavenVersion}</version>
       <scope>provided</scope>
     </dependency>
     <!-- Maven 3 core supplies the XML classes that plexus-utils 4 moved out; ProjectsMessage needs them. -->

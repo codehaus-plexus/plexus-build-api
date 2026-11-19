@@ -181,7 +181,7 @@ public interface BuildContext {
     /**
      * <p>addWarning.</p>
      *
-     * @deprecated Use addMessage with severity=SEVERITY_ERROR instead
+     * @deprecated Use {@link org.codehaus.plexus.build.messages.Messages} instead
      * @since 0.0.5
      * @param file a {@link java.io.File} object.
      * @param line a int.
@@ -189,12 +189,13 @@ public interface BuildContext {
      * @param message a {@link java.lang.String} object.
      * @param cause a {@link java.lang.Throwable} object.
      */
+    @Deprecated
     void addWarning(File file, int line, int column, String message, Throwable cause);
 
     /**
      * <p>addError.</p>
      *
-     * @deprecated Use addMessage with severity=SEVERITY_WARNING instead
+     * @deprecated Use {@link org.codehaus.plexus.build.messages.Messages} instead
      * @since 0.0.5
      * @param file a {@link java.io.File} object.
      * @param line a int.
@@ -202,6 +203,7 @@ public interface BuildContext {
      * @param message a {@link java.lang.String} object.
      * @param cause a {@link java.lang.Throwable} object.
      */
+    @Deprecated
     void addError(File file, int line, int column, String message, Throwable cause);
 
     /**

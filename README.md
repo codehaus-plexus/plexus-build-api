@@ -1,11 +1,13 @@
 Plexus Build API
 ================
 
-[![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/codehaus-plexus/plexus-build-api.svg?label=License)](http://www.apache.org/licenses/)
-[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.plexus/plexus-build-api.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.codehaus.plexus/plexus-build-api)
-![Build Status](https://github.com/codehaus-plexus/plexus-build-api/actions/workflows/maven.yml/badge.svg)
+[![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/codehaus-plexus/plexus-build-api.svg?label=License)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.plexus/plexus-build-api.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/org.codehaus.plexus/plexus-build-api)
+[![Build Status](https://github.com/codehaus-plexus/plexus-build-api/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/codehaus-plexus/plexus-build-api/actions/workflows/maven.yml?query=branch%3Amaster)
 
-This API allows IDEs to integrate with Maven deeper than it would be possible by just using regular Maven/Mojo API.
+This API lets IDEs integrate with Maven more deeply than the regular Maven plugin API allows. It requires
+Java 8 or later. The [site](https://codehaus-plexus.github.io/plexus-build-api/) has the Javadoc,
+and contributor notes are in [AGENTS.md](AGENTS.md).
 
 It supports
 
@@ -18,7 +20,7 @@ Current Implementations
 
 ### Default Implementation
 
-The default implementation shipping with this artifact is supposed to impose minimal overhead. It doesn't support incremental build and acts directly on the file system. Errors and warning are just logged through SLF4J.
+The default implementation shipping with this artifact is supposed to impose minimal overhead. It doesn't support incremental build and acts directly on the file system. Errors and warnings are just logged through SLF4J.
 
 ### M2Eclipse
 
@@ -71,12 +73,53 @@ public void execute() {
 }
 ```
 
+### BuildContext
+
+`BuildContext` is the original API: it tells a mojo which files changed since the last build, and writes
+output files so that an IDE learns about them.
+
+```java
+@Inject
+private BuildContext buildContext;
+
+public void execute() throws IOException {
+    if (buildContext.hasDelta(sourceFile)) {
+        try (OutputStream out = buildContext.newFileOutputStream(targetFile)) {
+            // write the generated file
+        }
+    }
+
+    // state kept between two executions of the same mojo in an incremental build
+    List<String> previous = buildContext.getValue("extracted");
+    buildContext.setValue("extracted", current);
+}
+```
+
+`getValue` returns `null` when the build is not incremental, and its return type is inferred from the
+assignment target: a stored value of another type fails with a `ClassCastException` at the call site.
+
 ### Progress
 
 The API allows a mojo to report progress in a way that is suitable to be shown as a progressbar as well as check if the user wants the mojo to gracefully abort its current operation.
-This can be useful for example when processing some files in a loop so the user can directly see the amount of progress and possibly ask to abort if it takes to long.
+This can be useful for example when processing some files in a loop so the user can directly see the amount of progress and possibly ask to abort if it takes too long.
 
-### IDE connection to maven process
+```java
+@Inject
+private Progress progress;
 
-This API is usually not used by mojos but for IDE integration, if enabled as a maven-core extension plexus-build-api supply a way to communicate with the running maven build and get events.
-The default implementation open a tcp connections to a port specified by the system property `plexus.build.ipc.port` using key/value encoded message format. If no such value is given all messages are silently discarded.
+public void execute() {
+    progress.startTask("Processing files", files.size());
+    for (File file : files) {
+        if (progress.isCancelRequested()) {
+            return;
+        }
+        // process the file
+        progress.worked(1);
+    }
+}
+```
+
+### IDE connection to the Maven process
+
+This API is usually not used by mojos but for IDE integration: if enabled as a Maven core extension, plexus-build-api supplies a way to communicate with the running Maven build and get events.
+The default implementation opens a TCP connection to a port specified by the system property `plexus.build.ipc.port` using key/value encoded message format. If no such value is given all messages are silently discarded.

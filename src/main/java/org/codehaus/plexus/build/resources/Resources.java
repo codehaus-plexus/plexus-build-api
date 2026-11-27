@@ -54,7 +54,8 @@ public interface Resources {
     OutputStream newOutputStream(Path file) throws IOException;
 
     /**
-     * Opens a stream that writes to the file and marks the file as derived.
+     * Opens a stream that writes to the file and marks the file as derived through {@link #markDerived(Path)}, which
+     * does nothing in the default implementation.
      *
      * @param file     the file to write
      * @param derived  whether the result is generated and may be overwritten by the next build

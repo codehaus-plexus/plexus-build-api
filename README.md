@@ -131,5 +131,5 @@ The default implementation opens a TCP connection to a port specified by the sys
 without waiting for the build tools that provide the new API.
 
 Use `hasDelta(Path)` as a hint for user-editable sources. For an input and an output, prefer `isUptodate(Path, Path)`
-and `newOutputStream(Path)`, which update the file only when the content changes. `copy(Path, Path)` combines both
-and marks generated files through `markDerived(Path)`.
+and `newOutputStream(Path)`, which update the file only when the content changes. `copy(Path, Path)` combines both.
+`markDerived(Path)` does nothing in `DefaultResources`; IDE integrations may override it.

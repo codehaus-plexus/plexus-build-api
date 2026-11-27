@@ -28,8 +28,6 @@ import org.codehaus.plexus.build.BuildContext;
 /**
  * A {@link Resources} implementation that delegates to the existing {@link BuildContext}, so plugins can adopt the
  * new API without waiting for the build tools that provide it.
- *
- * @since 1.1.0
  */
 @Named("default")
 @Singleton

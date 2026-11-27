@@ -25,8 +25,6 @@ import java.nio.file.Path;
  * deleted or modified outside the build may not be noticed. Where there is an input and an output, prefer
  * {@link #isUptodate(Path, Path)} and {@link #newOutputStream(Path)}, which only update a file when its content
  * actually changes.</p>
- *
- * @since 1.1.0
  */
 public interface Resources {
 

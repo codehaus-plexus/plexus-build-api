@@ -123,3 +123,13 @@ public void execute() {
 
 This API is usually not used by mojos but for IDE integration: if enabled as a Maven core extension, plexus-build-api supplies a way to communicate with the running Maven build and get events.
 The default implementation opens a TCP connection to a port specified by the system property `plexus.build.ipc.port` using key/value encoded message format. If no such value is given all messages are silently discarded.
+
+## Resources API
+
+`org.codehaus.plexus.build.resources.Resources` is a `Path`-based API for resource operations, separate from
+`BuildContext`'s logging and scanner concerns. `DefaultResources` delegates to `BuildContext`, so it can be adopted
+without waiting for the build tools that provide the new API.
+
+Use `hasDelta(Path)` as a hint for user-editable sources. For an input and an output, prefer `isUptodate(Path, Path)`
+and `newOutputStream(Path)`, which update the file only when the content changes. `copy(Path, Path)` combines both.
+`markDerived(Path)` does nothing in `DefaultResources`; IDE integrations may override it.

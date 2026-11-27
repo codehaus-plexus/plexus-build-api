@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DefaultResourcesTest {
@@ -83,12 +85,17 @@ class DefaultResourcesTest {
     }
 
     @Test
+    void getPathFallsBackToARelativePathWithoutASession() {
+        assertEquals(Paths.get("src/main/java/A.java"), resources().getPath("src/main/java/A.java"));
+    }
+
+    @Test
     void copyWritesWhenTargetIsStaleAndCreatesParentDirectories() throws Exception {
         Path source = Files.write(tempDir.resolve("source.txt"), "content".getBytes(StandardCharsets.UTF_8));
         Path target = tempDir.resolve("nested/out.txt");
 
         // delegate stream creation to a real stream, leaving every other call to the recording proxy
-        DefaultResources resources = new DefaultResources(new OutputStreamBuildContext(target), legacySupport.get());
+        DefaultResources resources = new DefaultResources(new OutputStreamBuildContext(), legacySupport.get());
         resources.copy(source, target);
 
         assertArrayEquals(Files.readAllBytes(source), Files.readAllBytes(target));
@@ -102,18 +109,12 @@ class DefaultResourcesTest {
 
         resources().copy(source, target);
 
-        assertTrue(!Files.exists(target));
+        assertFalse(Files.exists(target));
         assertEquals(Collections.singletonList("isUptodate"), buildContext.methods());
     }
 
     /** Records calls but returns a real stream for newFileOutputStream, so the copy can be observed. */
     private static final class OutputStreamBuildContext implements BuildContext {
-        private final Path target;
-
-        OutputStreamBuildContext(Path target) {
-            this.target = target;
-        }
-
         public boolean hasDelta(String relpath) {
             return false;
         }
@@ -129,7 +130,7 @@ class DefaultResourcesTest {
         public void refresh(File file) {}
 
         public OutputStream newFileOutputStream(File file) throws java.io.IOException {
-            return Files.newOutputStream(target);
+            return Files.newOutputStream(file.toPath());
         }
 
         public org.codehaus.plexus.util.Scanner newScanner(File basedir) {
